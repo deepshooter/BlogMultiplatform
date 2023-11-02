@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.models.Theme
+import com.deepshooter.blogmultiplatform.styles.LoginInputStyle
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Res
 import com.varabyte.kobweb.compose.css.FontWeight
@@ -33,6 +34,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.components.style.toModifier
 import com.varabyte.kobweb.silk.components.text.SpanText
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.LineStyle
@@ -70,7 +72,7 @@ fun LoginScreen() {
 
             Input(
                 type = InputType.Text,
-                attrs = Modifier
+                attrs = LoginInputStyle.toModifier()
                     .margin(bottom = 12.px)
                     .width(350.px)
                     .height(54.px)
@@ -78,11 +80,6 @@ fun LoginScreen() {
                     .backgroundColor(Colors.White)
                     .fontFamily(FONT_FAMILY)
                     .fontSize(14.px)
-                    .border(
-                        width = 0.px,
-                        style = LineStyle.None,
-                        color = Colors.Transparent
-                    )
                     .outline(
                         width = 0.px,
                         style = LineStyle.None,
@@ -95,7 +92,7 @@ fun LoginScreen() {
 
             Input(
                 type = InputType.Password,
-                attrs = Modifier
+                attrs = LoginInputStyle.toModifier()
                     .margin(bottom = 20.px)
                     .width(350.px)
                     .height(54.px)
@@ -103,11 +100,6 @@ fun LoginScreen() {
                     .backgroundColor(Colors.White)
                     .fontFamily(FONT_FAMILY)
                     .fontSize(14.px)
-                    .border(
-                        width = 0.px,
-                        style = LineStyle.None,
-                        color = Colors.Transparent
-                    )
                     .outline(
                         width = 0.px,
                         style = LineStyle.None,
@@ -129,7 +121,7 @@ fun LoginScreen() {
                     .borderRadius(r = 4.px)
                     .fontFamily(FONT_FAMILY)
                     .fontWeight(FontWeight.Medium)
-                    .fontSize(16.px)
+                    .fontSize(14.px)
                     .border(
                         width = 0.px,
                         style = LineStyle.None,
