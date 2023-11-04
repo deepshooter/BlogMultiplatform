@@ -15,3 +15,7 @@ object Res {
 
 }
 
+object Id {
+    const val usernameInput = "usernameInput"
+    const val passwordInput = "passwordInput"
+}
