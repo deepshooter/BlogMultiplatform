@@ -2,6 +2,7 @@ package com.deepshooter.blogmultiplatform.data
 
 import com.deepshooter.blogmultiplatform.models.User
 import com.deepshooter.blogmultiplatform.util.Constants.DATABASE_NAME
+import com.mongodb.client.model.Filters
 import com.varabyte.kobweb.api.data.add
 import com.varabyte.kobweb.api.init.InitApi
 import com.varabyte.kobweb.api.init.InitApiContext
@@ -40,6 +41,16 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
         } catch (e: Exception) {
             context.logger.error(e.message.toString())
             null
+        }
+    }
+
+    override suspend fun checkUserId(id: String): Boolean {
+        return try {
+            val documentCount = userCollection.countDocuments(User::id eq id).awaitFirst()
+            documentCount > 0
+        } catch (e: Exception) {
+            context.logger.error(e.message.toString())
+            false
         }
     }
 
