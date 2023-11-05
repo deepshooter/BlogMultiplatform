@@ -173,7 +173,7 @@ fun LoginScreen() {
 
                                 if (user != null) {
                                     rememberLoggedIn(remember = true, user = user)
-                                    context.router.navigateTo("admin/home")
+                                    context.router.navigateTo("/admin")
                                 } else {
                                     errorText = "The user doesn't exist."
                                     delay(3000)
@@ -197,7 +197,8 @@ fun LoginScreen() {
                 modifier = Modifier
                     .width(350.px)
                     .color(Colors.Red)
-                    .textAlign(TextAlign.Center),
+                    .textAlign(TextAlign.Center)
+                    .fontFamily(FONT_FAMILY),
                 text = errorText
             )
 
