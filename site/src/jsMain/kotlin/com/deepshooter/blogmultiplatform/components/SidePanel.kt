@@ -2,8 +2,10 @@ package com.deepshooter.blogmultiplatform.components
 
 import androidx.compose.runtime.Composable
 import com.deepshooter.blogmultiplatform.models.Theme
+import com.deepshooter.blogmultiplatform.styles.NavigationItemStyle
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
+import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.Res
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.dom.svg.Path
@@ -18,14 +20,18 @@ import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.height
+import com.varabyte.kobweb.compose.ui.modifiers.id
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.position
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
+import com.varabyte.kobweb.compose.ui.styleModifier
+import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.components.style.toModifier
 import com.varabyte.kobweb.silk.components.text.SpanText
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.px
@@ -103,22 +109,27 @@ private fun NavigationItem(
 ) {
 
     Row(
-        modifier = modifier
+        modifier = NavigationItemStyle.toModifier()
+            .then(modifier)
             .cursor(Cursor.Pointer)
             .onClick { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         VectorIcon(
             modifier = Modifier.margin(right = 10.px),
-            pathData = icon,
-            color = if (selected) Theme.Primary.hex else Theme.White.hex
+            selected = selected,
+            pathData = icon
         )
 
         SpanText(
             modifier = Modifier
+                .id(Id.navigationText)
                 .fontFamily(FONT_FAMILY)
                 .fontSize(16.px)
-                .color(if (selected) Theme.Primary.rgb else Theme.White.rgb),
+                .thenIf(
+                    condition = selected,
+                    other = Modifier.color(Theme.Primary.rgb)
+                ),
             text = title
         )
     }
@@ -127,11 +138,12 @@ private fun NavigationItem(
 @Composable
 private fun VectorIcon(
     modifier: Modifier = Modifier,
-    pathData: String,
-    color: String
+    selected: Boolean,
+    pathData: String
 ) {
     Svg(
         attrs = modifier
+            .id(Id.svgParent)
             .width(24.px)
             .height(24.px)
             .toAttrs {
@@ -140,13 +152,20 @@ private fun VectorIcon(
             }
     ) {
         Path(
-            attrs = Modifier.toAttrs {
-                attr("d", value = pathData)
-                attr("stroke", value = color)
-                attr("stroke-width", value = "2")
-                attr("stroke-linecap", value = "round")
-                attr("stroke-linejoin", value = "round")
-            }
+            attrs = Modifier
+                .id(Id.vectorIcon)
+                .thenIf(
+                    condition = selected,
+                    other = Modifier.styleModifier {
+                        property("stroke", Theme.Primary.hex)
+                    }
+                )
+                .toAttrs {
+                    attr("d", value = pathData)
+                    attr("stroke-width", value = "2")
+                    attr("stroke-linecap", value = "round")
+                    attr("stroke-linejoin", value = "round")
+                }
         )
     }
 }
