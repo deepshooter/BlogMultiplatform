@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.models.User
 import com.deepshooter.blogmultiplatform.models.UserWithoutPassword
+import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.LoginInputStyle
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Id
@@ -173,7 +174,7 @@ fun LoginScreen() {
 
                                 if (user != null) {
                                     rememberLoggedIn(remember = true, user = user)
-                                    context.router.navigateTo("/admin")
+                                    context.router.navigateTo(Screen.AdminHome.route)
                                 } else {
                                     errorText = "The user doesn't exist."
                                     delay(3000)

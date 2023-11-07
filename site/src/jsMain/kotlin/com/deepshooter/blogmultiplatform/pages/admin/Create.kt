@@ -13,17 +13,18 @@ import com.varabyte.kobweb.compose.ui.modifiers.maxHeight
 import com.varabyte.kobweb.core.Page
 import org.jetbrains.compose.web.css.px
 
-
 @Page
 @Composable
-fun HomePage() {
+fun CreatePage() {
     isUserLoggedIn {
-        HomeScreen()
+        CreateScreen()
     }
 }
 
+
 @Composable
-fun HomeScreen() {
+fun CreateScreen() {
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

@@ -2,6 +2,7 @@ package com.deepshooter.blogmultiplatform.components
 
 import androidx.compose.runtime.Composable
 import com.deepshooter.blogmultiplatform.models.Theme
+import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.NavigationItemStyle
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
@@ -30,6 +31,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.compose.ui.toAttrs
+import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.style.toModifier
 import com.varabyte.kobweb.silk.components.text.SpanText
@@ -47,6 +49,9 @@ fun SidePanel() {
 
 @Composable
 private fun SidePanelInternal() {
+
+    val context = rememberPageContext()
+
     Column(
         modifier = Modifier
             .padding(leftRight = 40.px, topBottom = 50.px)
@@ -74,19 +79,21 @@ private fun SidePanelInternal() {
         NavigationItem(
             modifier = Modifier.margin(bottom = 24.px),
             title = "Home",
-            selected = true,
+            selected = context.route.path == Screen.AdminHome.route,
             icon = Res.PathIcon.home,
             onClick = {}
         )
         NavigationItem(
             modifier = Modifier.margin(bottom = 24.px),
             title = "Create Post",
+            selected = context.route.path == Screen.AdminCreate.route,
             icon = Res.PathIcon.create,
             onClick = {}
         )
         NavigationItem(
             modifier = Modifier.margin(bottom = 24.px),
             title = "My Posts",
+            selected = context.route.path == Screen.AdminMyPosts.route,
             icon = Res.PathIcon.posts,
             onClick = {}
         )
