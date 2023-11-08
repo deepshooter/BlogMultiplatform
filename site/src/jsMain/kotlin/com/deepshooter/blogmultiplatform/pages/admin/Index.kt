@@ -1,6 +1,11 @@
 package com.deepshooter.blogmultiplatform.pages.admin
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.deepshooter.blogmultiplatform.components.OverflowSidePanel
 import com.deepshooter.blogmultiplatform.components.SidePanel
 import com.deepshooter.blogmultiplatform.util.Constants.PAGE_WIDTH
 import com.deepshooter.blogmultiplatform.util.isUserLoggedIn
@@ -24,6 +29,9 @@ fun HomePage() {
 
 @Composable
 fun HomeScreen() {
+
+    var overflowMenuOpened by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -33,7 +41,13 @@ fun HomeScreen() {
                 .fillMaxSize()
                 .maxHeight(PAGE_WIDTH.px)
         ) {
-            SidePanel(onMenuClick = {})
+
+            SidePanel(onMenuClick = { overflowMenuOpened = true })
+
+            if (overflowMenuOpened) {
+                OverflowSidePanel(onMenuClose = { overflowMenuOpened = false })
+            }
+
         }
     }
 
