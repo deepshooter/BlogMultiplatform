@@ -33,7 +33,7 @@ fun HomeScreen() {
                 .fillMaxSize()
                 .maxHeight(PAGE_WIDTH.px)
         ) {
-            SidePanel()
+            SidePanel(onMenuClick = {})
         }
     }
 

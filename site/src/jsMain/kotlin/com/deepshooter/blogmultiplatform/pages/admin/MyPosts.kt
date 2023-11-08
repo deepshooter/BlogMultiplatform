@@ -35,7 +35,7 @@ fun MyPostsScreen() {
                 .fillMaxSize()
                 .maxHeight(PAGE_WIDTH.px)
         ) {
-            SidePanel()
+            SidePanel(onMenuClick = {})
         }
     }
 
