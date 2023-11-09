@@ -1,6 +1,12 @@
 package com.deepshooter.blogmultiplatform.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.NavigationItemStyle
@@ -253,6 +259,23 @@ fun OverflowSidePanel(
 ) {
 
     val breakpoint = rememberBreakpoint()
+    val scope = rememberCoroutineScope()
+
+    var translateX by remember { mutableStateOf((-100).percent) }
+    var opacity by remember { mutableStateOf(0.percent) }
+
+    LaunchedEffect(key1 = breakpoint) {
+        translateX = 0.percent
+        opacity = 100.percent
+        if (breakpoint > Breakpoint.MD) {
+            scope.launch {
+                translateX = (-100).percent
+                opacity = 0.percent
+                delay(500)
+                onMenuClose()
+            }
+        }
+    }
 
 
     Box(
@@ -261,6 +284,8 @@ fun OverflowSidePanel(
             .height(100.vh)
             .position(Position.Fixed)
             .zIndex(9)
+            .opacity(opacity)
+            .transition(CSSTransition(property = "opacity", duration = 300.ms))
             .backgroundColor(Theme.HalfBlack.rgb)
     ) {
 
@@ -269,6 +294,10 @@ fun OverflowSidePanel(
                 .padding(all = 24.px)
                 .fillMaxHeight()
                 .width(if (breakpoint < Breakpoint.MD) 50.percent else 25.percent)
+                .overflow(Overflow.Auto)
+                .scrollBehavior(ScrollBehavior.Smooth)
+                .translateX(translateX)
+                .transition(CSSTransition(property = "translate", duration = 300.ms))
                 .overflow(Overflow.Auto)
                 .scrollBehavior(ScrollBehavior.Smooth)
                 .backgroundColor(Theme.Secondary.rgb)
@@ -284,7 +313,12 @@ fun OverflowSidePanel(
                         .color(Colors.White)
                         .cursor(Cursor.Pointer)
                         .onClick {
-                            onMenuClose()
+                            scope.launch {
+                                translateX = (-100).percent
+                                opacity = 0.percent
+                                delay(500)
+                                onMenuClose()
+                            }
                         },
                     size = IconSize.LG
                 )
