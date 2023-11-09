@@ -1,22 +1,9 @@
 package com.deepshooter.blogmultiplatform.pages.admin
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.deepshooter.blogmultiplatform.components.OverflowSidePanel
-import com.deepshooter.blogmultiplatform.components.SidePanel
-import com.deepshooter.blogmultiplatform.util.Constants.PAGE_WIDTH
+import com.deepshooter.blogmultiplatform.components.AdminPageLayout
 import com.deepshooter.blogmultiplatform.util.isUserLoggedIn
-import com.varabyte.kobweb.compose.foundation.layout.Box
-import com.varabyte.kobweb.compose.foundation.layout.Column
-import com.varabyte.kobweb.compose.ui.Alignment
-import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
-import com.varabyte.kobweb.compose.ui.modifiers.maxHeight
 import com.varabyte.kobweb.core.Page
-import org.jetbrains.compose.web.css.px
 
 
 @Page
@@ -30,25 +17,8 @@ fun HomePage() {
 @Composable
 fun HomeScreen() {
 
-    var overflowMenuOpened by remember { mutableStateOf(false) }
+    AdminPageLayout {
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .maxHeight(PAGE_WIDTH.px)
-        ) {
-
-            SidePanel(onMenuClick = { overflowMenuOpened = true })
-
-            if (overflowMenuOpened) {
-                OverflowSidePanel(onMenuClose = { overflowMenuOpened = false })
-            }
-
-        }
     }
 
 }
