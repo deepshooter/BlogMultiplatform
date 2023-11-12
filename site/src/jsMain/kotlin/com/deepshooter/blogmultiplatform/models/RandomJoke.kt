@@ -3,7 +3,7 @@ package com.deepshooter.blogmultiplatform.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Joke(
+data class RandomJoke(
     val id: Int,
     val joke: String
 )

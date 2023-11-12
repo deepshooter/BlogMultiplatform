@@ -2,7 +2,7 @@ package com.deepshooter.blogmultiplatform.pages.admin
 
 import androidx.compose.runtime.Composable
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
-import com.deepshooter.blogmultiplatform.models.Joke
+import com.deepshooter.blogmultiplatform.models.RandomJoke
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
@@ -64,13 +64,13 @@ fun HomeScreen() {
 
     AdminPageLayout {
         AddButton()
-        HomeContent(joke = Joke(id = 2, joke = "Some Random Joke...:"))
+        HomeContent(randomJoke = RandomJoke(id = 2, joke = "Some Random Joke...:"))
     }
 
 }
 
 @Composable
-fun HomeContent(joke: Joke?) {
+fun HomeContent(randomJoke: RandomJoke?) {
     val breakpoint = rememberBreakpoint()
 
     Box(
@@ -80,7 +80,7 @@ fun HomeContent(joke: Joke?) {
         contentAlignment = Alignment.Center
     ) {
 
-        if (joke != null) {
+        if (randomJoke != null) {
 
             Column(
                 modifier = Modifier
@@ -90,7 +90,7 @@ fun HomeContent(joke: Joke?) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                if (joke.id != -1) {
+                if (randomJoke.id != -1) {
                     Image(
                         modifier = Modifier
                             .size(150.px)
@@ -99,7 +99,7 @@ fun HomeContent(joke: Joke?) {
                     )
                 }
 
-                if (joke.joke.contains("Q:")) {
+                if (randomJoke.joke.contains("Q:")) {
 
                     SpanText(
                         modifier = Modifier
@@ -110,7 +110,7 @@ fun HomeContent(joke: Joke?) {
                             .fontSize(28.px)
                             .fontFamily(FONT_FAMILY)
                             .fontWeight(FontWeight.Bold),
-                        text = joke.joke.split(":")[1].dropLast(1)
+                        text = randomJoke.joke.split(":")[1].dropLast(1)
                     )
                     SpanText(
                         modifier = Modifier
@@ -120,7 +120,7 @@ fun HomeContent(joke: Joke?) {
                             .fontSize(20.px)
                             .fontFamily(FONT_FAMILY)
                             .fontWeight(FontWeight.Normal),
-                        text = joke.joke.split(":").last()
+                        text = randomJoke.joke.split(":").last()
                     )
                 } else {
 
@@ -133,7 +133,7 @@ fun HomeContent(joke: Joke?) {
                             .fontFamily(FONT_FAMILY)
                             .fontSize(28.px)
                             .fontWeight(FontWeight.Bold),
-                        text = joke.joke
+                        text = randomJoke.joke
                     )
                 }
             }
