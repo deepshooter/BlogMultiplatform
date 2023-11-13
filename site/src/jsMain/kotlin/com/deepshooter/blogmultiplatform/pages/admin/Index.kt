@@ -1,6 +1,11 @@
 package com.deepshooter.blogmultiplatform.pages.admin
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
 import com.deepshooter.blogmultiplatform.models.RandomJoke
 import com.deepshooter.blogmultiplatform.models.Theme
@@ -9,6 +14,7 @@ import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Constants.PAGE_WIDTH
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import com.deepshooter.blogmultiplatform.util.Res
+import com.deepshooter.blogmultiplatform.util.fetchRandomJoke
 import com.deepshooter.blogmultiplatform.util.isUserLoggedIn
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
@@ -62,9 +68,15 @@ fun HomePage() {
 @Composable
 fun HomeScreen() {
 
+    var randomJoke: RandomJoke? by remember { mutableStateOf(null) }
+
+    LaunchedEffect(Unit) {
+        fetchRandomJoke { randomJoke = it }
+    }
+
     AdminPageLayout {
         AddButton()
-        HomeContent(randomJoke = RandomJoke(id = 2, joke = "Some Random Joke...:"))
+        HomeContent(randomJoke = randomJoke)
     }
 
 }
