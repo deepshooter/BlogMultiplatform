@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
+import com.deepshooter.blogmultiplatform.components.LoadingIndicator
 import com.deepshooter.blogmultiplatform.models.RandomJoke
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.navigation.Screen
@@ -150,7 +151,7 @@ fun HomeContent(randomJoke: RandomJoke?) {
                 }
             }
         } else {
-            println("Loading a Joke..")
+            LoadingIndicator()
         }
     }
 }
