@@ -10,6 +10,7 @@ import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import com.deepshooter.blogmultiplatform.util.isUserLoggedIn
+import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
+import com.varabyte.kobweb.compose.ui.modifiers.classNames
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
@@ -28,6 +30,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.outline
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.toAttrs
@@ -43,6 +46,13 @@ import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.dom.A
+import org.jetbrains.compose.web.dom.Li
+import org.jetbrains.compose.web.dom.Text
+import org.jetbrains.compose.web.dom.Ul
+import com.deepshooter.blogmultiplatform.models.Category
+import com.varabyte.kobweb.compose.ui.attrsModifier
+import com.varabyte.kobweb.compose.ui.modifiers.cursor
 
 @Page
 @Composable
@@ -60,6 +70,7 @@ fun CreateScreen() {
     var popularSwitch by remember { mutableStateOf(false) }
     var mainSwitch by remember { mutableStateOf(false) }
     var sponsoredSwitch by remember { mutableStateOf(false) }
+    var selectedCategory by remember { mutableStateOf(Category.Programming) }
 
     AdminPageLayout {
 
@@ -184,7 +195,6 @@ fun CreateScreen() {
                     attrs = Modifier
                         .fillMaxWidth()
                         .height(54.px)
-                        .margin(bottom = 12.px)
                         .padding(leftRight = 20.px)
                         .backgroundColor(Theme.LightGray.rgb)
                         .borderRadius(4.px)
@@ -205,8 +215,71 @@ fun CreateScreen() {
                         }
                 )
 
+                CategoryDropdown(
+                    selectedCategory = selectedCategory,
+                    onCategorySelect = { selectedCategory = it }
+                )
+
             }
         }
     }
 
+}
+
+@Composable
+fun CategoryDropdown(
+    selectedCategory: Category,
+    onCategorySelect: (Category) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .margin(topBottom = 12.px)
+            .classNames("dropdown")
+            .fillMaxWidth()
+            .height(54.px)
+            .backgroundColor(Theme.LightGray.rgb)
+            .cursor(Cursor.Pointer)
+            .attrsModifier {
+                attr("data-bs-toggle", "dropdown")
+            }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(leftRight = 20.px),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            SpanText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fontSize(16.px)
+                    .fontFamily(FONT_FAMILY),
+                text = selectedCategory.name
+            )
+            Box(modifier = Modifier.classNames("dropdown-toggle"))
+        }
+        Ul(
+            attrs = Modifier
+                .fillMaxWidth()
+                .classNames("dropdown-menu")
+                .toAttrs()
+        ) {
+            Category.values().forEach { category ->
+                Li {
+                    A(
+                        attrs = Modifier
+                            .classNames("dropdown-item")
+                            .color(Colors.Black)
+                            .fontFamily(FONT_FAMILY)
+                            .fontSize(16.px)
+                            .onClick { onCategorySelect(category) }
+                            .toAttrs()
+                    ) {
+                        Text(value = category.name)
+                    }
+                }
+            }
+        }
+    }
 }
