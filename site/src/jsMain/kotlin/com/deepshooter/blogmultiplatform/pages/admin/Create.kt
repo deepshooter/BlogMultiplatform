@@ -70,6 +70,7 @@ fun CreateScreen() {
     var popularSwitch by remember { mutableStateOf(false) }
     var mainSwitch by remember { mutableStateOf(false) }
     var sponsoredSwitch by remember { mutableStateOf(false) }
+    var pasteImageChecked by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(Category.Programming) }
 
     AdminPageLayout {
@@ -219,6 +220,26 @@ fun CreateScreen() {
                     selectedCategory = selectedCategory,
                     onCategorySelect = { selectedCategory = it }
                 )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth().margin(topBottom = 12.px),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Switch(
+                        modifier = Modifier.margin(right = 8.px),
+                        checked = pasteImageChecked,
+                        onCheckedChange = { pasteImageChecked = it },
+                        size = SwitchSize.MD
+                    )
+                    SpanText(
+                        modifier = Modifier
+                            .fontSize(14.px)
+                            .fontFamily(FONT_FAMILY)
+                            .color(Theme.HalfBlack.rgb),
+                        text = "Paste an Image URL instead"
+                    )
+                }
 
             }
         }
