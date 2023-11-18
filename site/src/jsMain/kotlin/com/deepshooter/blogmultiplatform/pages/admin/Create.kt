@@ -51,8 +51,18 @@ import org.jetbrains.compose.web.dom.Li
 import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.dom.Ul
 import com.deepshooter.blogmultiplatform.models.Category
+import com.deepshooter.blogmultiplatform.util.Id
+import com.varabyte.kobweb.compose.css.FontWeight
+import com.varabyte.kobweb.compose.file.loadDataUrlFromDisk
 import com.varabyte.kobweb.compose.ui.attrsModifier
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
+import com.varabyte.kobweb.compose.ui.modifiers.disabled
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
+import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
+import com.varabyte.kobweb.compose.ui.modifiers.id
+import com.varabyte.kobweb.compose.ui.thenIf
+import kotlinx.browser.document
+import org.jetbrains.compose.web.dom.Button
 
 @Page
 @Composable
@@ -70,8 +80,9 @@ fun CreateScreen() {
     var popularSwitch by remember { mutableStateOf(false) }
     var mainSwitch by remember { mutableStateOf(false) }
     var sponsoredSwitch by remember { mutableStateOf(false) }
-    var pasteImageChecked by remember { mutableStateOf(false) }
+    var thumbnailInputDisabled by remember { mutableStateOf(true) }
     var selectedCategory by remember { mutableStateOf(Category.Programming) }
+    var fileName by remember { mutableStateOf("") }
 
     AdminPageLayout {
 
@@ -228,8 +239,8 @@ fun CreateScreen() {
                 ) {
                     Switch(
                         modifier = Modifier.margin(right = 8.px),
-                        checked = pasteImageChecked,
-                        onCheckedChange = { pasteImageChecked = it },
+                        checked = !thumbnailInputDisabled,
+                        onCheckedChange = { thumbnailInputDisabled = !it },
                         size = SwitchSize.MD
                     )
                     SpanText(
@@ -240,6 +251,16 @@ fun CreateScreen() {
                         text = "Paste an Image URL instead"
                     )
                 }
+
+                ThumbnailUploader(
+                    thumbnail = fileName,
+                    thumbnailInputDisabled = thumbnailInputDisabled,
+                    onThumbnailSelect = { filename, file ->
+                        fileName = filename
+                        println(filename)
+                        println(file)
+                    }
+                )
 
             }
         }
@@ -301,6 +322,87 @@ fun CategoryDropdown(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ThumbnailUploader(
+    thumbnail: String,
+    thumbnailInputDisabled: Boolean,
+    onThumbnailSelect: (String, String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .margin(bottom = 20.px)
+            .height(54.px)
+    ) {
+        Input(
+            type = InputType.Text,
+            attrs = Modifier
+                .id(Id.thumbnailInput)
+                .fillMaxSize()
+                .margin(right = 12.px)
+                .padding(leftRight = 20.px)
+                .backgroundColor(Theme.LightGray.rgb)
+                .borderRadius(r = 4.px)
+                .border(
+                    width = 0.px,
+                    style = LineStyle.None,
+                    color = Colors.Transparent
+                )
+                .outline(
+                    width = 0.px,
+                    style = LineStyle.None,
+                    color = Colors.Transparent
+                )
+                .fontFamily(FONT_FAMILY)
+                .fontSize(16.px)
+                .thenIf(
+                    condition = thumbnailInputDisabled,
+                    other = Modifier.disabled()
+                )
+                .toAttrs {
+                    attr("placeholder", "Thumbnail")
+                    attr("value", thumbnail)
+                }
+        )
+        Button(
+            attrs = Modifier
+                .onClick {
+                    document.loadDataUrlFromDisk(
+                        accept = "image/png, image/jpeg",
+                        onLoaded = {
+                            onThumbnailSelect(filename, it)
+                        }
+                    )
+                }
+                .fillMaxHeight()
+                .padding(leftRight = 24.px)
+                .backgroundColor(if (!thumbnailInputDisabled) Theme.Gray.rgb else Theme.Primary.rgb)
+                .color(if (!thumbnailInputDisabled) Theme.DarkGray.rgb else Colors.White)
+                .borderRadius(r = 4.px)
+                .border(
+                    width = 0.px,
+                    style = LineStyle.None,
+                    color = Colors.Transparent
+                )
+                .outline(
+                    width = 0.px,
+                    style = LineStyle.None,
+                    color = Colors.Transparent
+                )
+                .fontFamily(FONT_FAMILY)
+                .fontWeight(FontWeight.Medium)
+                .fontSize(14.px)
+                .thenIf(
+                    condition = !thumbnailInputDisabled,
+                    other = Modifier.disabled()
+                )
+                .toAttrs()
+        ) {
+            SpanText(text = "Upload")
         }
     }
 }
