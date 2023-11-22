@@ -52,6 +52,7 @@ import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.dom.Ul
 import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.EditorKey
+import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
 import com.deepshooter.blogmultiplatform.util.Id
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.file.loadDataUrlFromDisk
@@ -63,6 +64,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.id
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.components.style.toModifier
 import kotlinx.browser.document
 import org.jetbrains.compose.web.dom.Button
 
@@ -477,7 +479,7 @@ fun EditorKeyView(
     key: EditorKey,
 ) {
     Box(
-        modifier = Modifier
+        modifier = EditorKeyStyle.toModifier()
             .fillMaxHeight()
             .padding(leftRight = 12.px)
             .borderRadius(r = 4.px)
