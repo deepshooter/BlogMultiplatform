@@ -50,4 +50,6 @@ object Id {
     const val vectorIcon = "vectorIcon"
     const val navigationText = "navigationText"
     const val thumbnailInput = "thumbnailInput"
+    const val editor = "editor"
+    const val editorPreview = "editorPreview"
 }
