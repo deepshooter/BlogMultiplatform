@@ -284,7 +284,10 @@ fun CreateScreen() {
                     editorVisibility = editorVisibility,
                     onEditorVisibilityChange = { editorVisibility = !editorVisibility }
                 )
+
                 Editor(editorVisibility = editorVisibility)
+
+                CreateButton("Create", {})
 
             }
         }
@@ -592,5 +595,37 @@ fun Editor(editorVisibility: Boolean) {
                 .toAttrs()
         )
 
+    }
+}
+
+@Composable
+fun CreateButton(
+    text: String,
+    onClick: () -> Unit
+) {
+    Button(
+        attrs = Modifier
+            .onClick { onClick() }
+            .fillMaxWidth()
+            .height(54.px)
+            .margin(top = 24.px)
+            .backgroundColor(Theme.Primary.rgb)
+            .color(Colors.White)
+            .borderRadius(r = 4.px)
+            .border(
+                width = 0.px,
+                style = LineStyle.None,
+                color = Colors.Transparent
+            )
+            .outline(
+                width = 0.px,
+                style = LineStyle.None,
+                color = Colors.Transparent
+            )
+            .fontFamily(FONT_FAMILY)
+            .fontSize(16.px)
+            .toAttrs()
+    ) {
+        SpanText(text = text)
     }
 }
