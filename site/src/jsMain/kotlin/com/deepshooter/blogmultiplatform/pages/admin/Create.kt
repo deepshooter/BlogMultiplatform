@@ -19,7 +19,6 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
-import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.classNames
 import com.varabyte.kobweb.compose.ui.modifiers.color
@@ -31,7 +30,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
-import com.varabyte.kobweb.compose.ui.modifiers.outline
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
@@ -44,7 +42,6 @@ import com.varabyte.kobweb.silk.components.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.components.text.SpanText
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import org.jetbrains.compose.web.attributes.InputType
-import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Li
@@ -54,6 +51,7 @@ import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.EditorKey
 import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
 import com.deepshooter.blogmultiplatform.util.Id
+import com.deepshooter.blogmultiplatform.util.noBorder
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.Resize
@@ -99,7 +97,7 @@ fun CreateScreen() {
     var thumbnailInputDisabled by remember { mutableStateOf(true) }
     var editorVisibility by remember { mutableStateOf(true) }
     var selectedCategory by remember { mutableStateOf(Category.Programming) }
-    var fileName by remember { mutableStateOf("") }
+    var thumbnail by remember { mutableStateOf("") }
 
     AdminPageLayout {
 
@@ -202,16 +200,7 @@ fun CreateScreen() {
                         .padding(leftRight = 20.px)
                         .backgroundColor(Theme.LightGray.rgb)
                         .borderRadius(4.px)
-                        .border(
-                            width = 0.px,
-                            style = LineStyle.None,
-                            color = Colors.Transparent
-                        )
-                        .outline(
-                            width = 0.px,
-                            style = LineStyle.None,
-                            color = Colors.Transparent
-                        )
+                        .noBorder()
                         .fontFamily(FONT_FAMILY)
                         .fontSize(16.px)
                         .toAttrs {
@@ -227,16 +216,7 @@ fun CreateScreen() {
                         .padding(leftRight = 20.px)
                         .backgroundColor(Theme.LightGray.rgb)
                         .borderRadius(4.px)
-                        .border(
-                            width = 0.px,
-                            style = LineStyle.None,
-                            color = Colors.Transparent
-                        )
-                        .outline(
-                            width = 0.px,
-                            style = LineStyle.None,
-                            color = Colors.Transparent
-                        )
+                        .noBorder()
                         .fontFamily(FONT_FAMILY)
                         .fontSize(16.px)
                         .toAttrs {
@@ -270,10 +250,10 @@ fun CreateScreen() {
                 }
 
                 ThumbnailUploader(
-                    thumbnail = fileName,
+                    thumbnail = thumbnail,
                     thumbnailInputDisabled = thumbnailInputDisabled,
                     onThumbnailSelect = { filename, file ->
-                        fileName = filename
+                        thumbnail = filename
                         println(filename)
                         println(file)
                     }
@@ -374,16 +354,7 @@ fun ThumbnailUploader(
                 .padding(leftRight = 20.px)
                 .backgroundColor(Theme.LightGray.rgb)
                 .borderRadius(r = 4.px)
-                .border(
-                    width = 0.px,
-                    style = LineStyle.None,
-                    color = Colors.Transparent
-                )
-                .outline(
-                    width = 0.px,
-                    style = LineStyle.None,
-                    color = Colors.Transparent
-                )
+                .noBorder()
                 .fontFamily(FONT_FAMILY)
                 .fontSize(16.px)
                 .thenIf(
@@ -410,16 +381,7 @@ fun ThumbnailUploader(
                 .backgroundColor(if (!thumbnailInputDisabled) Theme.Gray.rgb else Theme.Primary.rgb)
                 .color(if (!thumbnailInputDisabled) Theme.DarkGray.rgb else Colors.White)
                 .borderRadius(r = 4.px)
-                .border(
-                    width = 0.px,
-                    style = LineStyle.None,
-                    color = Colors.Transparent
-                )
-                .outline(
-                    width = 0.px,
-                    style = LineStyle.None,
-                    color = Colors.Transparent
-                )
+                .noBorder()
                 .fontFamily(FONT_FAMILY)
                 .fontWeight(FontWeight.Medium)
                 .fontSize(14.px)
@@ -479,16 +441,7 @@ fun EditorControls(
                             if (editorVisibility) Theme.DarkGray.rgb
                             else Colors.White
                         )
-                        .border(
-                            width = 0.px,
-                            style = LineStyle.None,
-                            color = Colors.Transparent
-                        )
-                        .outline(
-                            width = 0.px,
-                            style = LineStyle.None,
-                            color = Colors.Transparent
-                        )
+                        .noBorder()
                         .onClick { onEditorVisibilityChange() }
                         .toAttrs()
                 ) {
@@ -540,16 +493,7 @@ fun Editor(editorVisibility: Boolean) {
                 .padding(all = 20.px)
                 .backgroundColor(Theme.LightGray.rgb)
                 .borderRadius(r = 4.px)
-                .border(
-                    width = 0.px,
-                    style = LineStyle.None,
-                    color = Colors.Transparent
-                )
-                .outline(
-                    width = 0.px,
-                    style = LineStyle.None,
-                    color = Colors.Transparent
-                )
+                .noBorder()
                 .visibility(
                     if (editorVisibility) Visibility.Visible
                     else Visibility.Hidden
@@ -582,16 +526,7 @@ fun Editor(editorVisibility: Boolean) {
                 )
                 .overflow(Overflow.Auto)
                 .scrollBehavior(ScrollBehavior.Smooth)
-                .border(
-                    width = 0.px,
-                    style = LineStyle.None,
-                    color = Colors.Transparent
-                )
-                .outline(
-                    width = 0.px,
-                    style = LineStyle.None,
-                    color = Colors.Transparent
-                )
+                .noBorder()
                 .toAttrs()
         )
 
@@ -612,16 +547,7 @@ fun CreateButton(
             .backgroundColor(Theme.Primary.rgb)
             .color(Colors.White)
             .borderRadius(r = 4.px)
-            .border(
-                width = 0.px,
-                style = LineStyle.None,
-                color = Colors.Transparent
-            )
-            .outline(
-                width = 0.px,
-                style = LineStyle.None,
-                color = Colors.Transparent
-            )
+            .noBorder()
             .fontFamily(FONT_FAMILY)
             .fontSize(16.px)
             .toAttrs()
