@@ -1,5 +1,6 @@
 package com.deepshooter.blogmultiplatform.data
 
+import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.User
 import com.deepshooter.blogmultiplatform.util.Constants.DATABASE_NAME
 import com.mongodb.client.model.Filters
@@ -28,6 +29,11 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
     private val client = KMongo.createClient()
     private val database = client.getDatabase(DATABASE_NAME)
     private val userCollection = database.getCollection<User>()
+    private val postCollection = database.getCollection<Post>()
+
+    override suspend fun addPost(post: Post): Boolean {
+        return postCollection.insertOne(post).awaitFirst().wasAcknowledged()
+    }
 
     override suspend fun checkUserExistence(user: User): User? {
         return try {
