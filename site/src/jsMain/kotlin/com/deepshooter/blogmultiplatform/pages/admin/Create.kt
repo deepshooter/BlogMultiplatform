@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
 import com.deepshooter.blogmultiplatform.models.Theme
@@ -49,8 +50,11 @@ import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.dom.Ul
 import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.EditorKey
+import com.deepshooter.blogmultiplatform.models.Post
+import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
 import com.deepshooter.blogmultiplatform.util.Id
+import com.deepshooter.blogmultiplatform.util.addPost
 import com.deepshooter.blogmultiplatform.util.noBorder
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
@@ -74,9 +78,15 @@ import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.style.toModifier
 import kotlinx.browser.document
+import kotlinx.browser.localStorage
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.TextArea
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLTextAreaElement
+import org.w3c.dom.get
+import kotlin.js.Date
 
 
 data class CreatePageUiState(
@@ -105,6 +115,7 @@ fun CreatePage() {
 @Composable
 fun CreateScreen() {
 
+    val scope = rememberCoroutineScope()
     val breakpoint = rememberBreakpoint()
     var uiEvent by remember { mutableStateOf(CreatePageUiState()) }
 
@@ -203,6 +214,7 @@ fun CreateScreen() {
                 Input(
                     type = InputType.Text,
                     attrs = Modifier
+                        .id(Id.titleInput)
                         .fillMaxWidth()
                         .height(54.px)
                         .margin(topBottom = 12.px)
@@ -220,6 +232,7 @@ fun CreateScreen() {
                 Input(
                     type = InputType.Text,
                     attrs = Modifier
+                        .id(Id.subtitleInput)
                         .fillMaxWidth()
                         .height(54.px)
                         .padding(leftRight = 20.px)
@@ -262,7 +275,11 @@ fun CreateScreen() {
                     thumbnail = uiEvent.thumbnail,
                     thumbnailInputDisabled = uiEvent.thumbnailInputDisabled,
                     onThumbnailSelect = { filename, file ->
-                        uiEvent = uiEvent.copy(thumbnail = filename)
+
+                        (document.getElementById(Id.thumbnailInput) as HTMLInputElement).value =
+                            filename
+
+                        uiEvent = uiEvent.copy(thumbnail = file)
                         println(filename)
                         println(file)
                     }
@@ -278,7 +295,55 @@ fun CreateScreen() {
 
                 Editor(editorVisibility = uiEvent.editorVisibility)
 
-                CreateButton("Create", {})
+                CreateButton(text = "Create", onClick =  {
+
+                    uiEvent =
+                        uiEvent.copy(title = (document.getElementById(Id.titleInput) as HTMLInputElement).value)
+                    uiEvent =
+                        uiEvent.copy(subtitle = (document.getElementById(Id.subtitleInput) as HTMLInputElement).value)
+                    uiEvent =
+                        uiEvent.copy(content = (document.getElementById(Id.editor) as HTMLTextAreaElement).value)
+
+                    if (!uiEvent.thumbnailInputDisabled) {
+                        uiEvent =
+                            uiEvent.copy(thumbnail = (document.getElementById(Id.thumbnailInput) as HTMLInputElement).value)
+                    }
+
+                    if (
+                        uiEvent.title.isNotEmpty() &&
+                        uiEvent.subtitle.isNotEmpty() &&
+                        uiEvent.thumbnail.isNotEmpty() &&
+                        uiEvent.content.isNotEmpty()
+                    ) {
+
+                       scope.launch {
+
+                           val result = addPost(
+                               Post(
+                                   author = localStorage["username"].toString(),
+                                   title = uiEvent.title,
+                                   subtitle = uiEvent.subtitle,
+                                   date = Date.now().toLong(),
+                                   thumbnail = uiEvent.thumbnail,
+                                   content = uiEvent.content,
+                                   category = uiEvent.category,
+                                   popular = uiEvent.popular,
+                                   main = uiEvent.main,
+                                   sponsored = uiEvent.sponsored
+                               )
+                           )
+
+                           if (result) {
+                               println("Successful!")
+                           }
+
+                       }
+
+                    } else {
+                        println("Please fill out all fields.")
+                    }
+
+                })
 
             }
         }

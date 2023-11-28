@@ -52,4 +52,6 @@ object Id {
     const val thumbnailInput = "thumbnailInput"
     const val editor = "editor"
     const val editorPreview = "editorPreview"
+    const val titleInput = "titleInput"
+    const val subtitleInput = "subtitleInput"
 }
