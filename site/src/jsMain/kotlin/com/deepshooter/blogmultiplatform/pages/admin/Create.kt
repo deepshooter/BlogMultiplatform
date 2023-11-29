@@ -51,7 +51,6 @@ import org.jetbrains.compose.web.dom.Ul
 import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.EditorKey
 import com.deepshooter.blogmultiplatform.models.Post
-import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
 import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.addPost
@@ -117,7 +116,7 @@ fun CreateScreen() {
 
     val scope = rememberCoroutineScope()
     val breakpoint = rememberBreakpoint()
-    var uiEvent by remember { mutableStateOf(CreatePageUiState()) }
+    var uiState by remember { mutableStateOf(CreatePageUiState()) }
 
     AdminPageLayout {
 
@@ -150,8 +149,8 @@ fun CreateScreen() {
 
                         Switch(
                             modifier = Modifier.margin(right = 8.px),
-                            checked = uiEvent.popular,
-                            onCheckedChange = { uiEvent = uiEvent.copy(popular = it) },
+                            checked = uiState.popular,
+                            onCheckedChange = { uiState = uiState.copy(popular = it) },
                             size = SwitchSize.LG
                         )
                         SpanText(
@@ -175,8 +174,8 @@ fun CreateScreen() {
 
                         Switch(
                             modifier = Modifier.margin(right = 8.px),
-                            checked = uiEvent.main,
-                            onCheckedChange = { uiEvent = uiEvent.copy(main = it) },
+                            checked = uiState.main,
+                            onCheckedChange = { uiState = uiState.copy(main = it) },
                             size = SwitchSize.LG
                         )
                         SpanText(
@@ -195,8 +194,8 @@ fun CreateScreen() {
 
                         Switch(
                             modifier = Modifier.margin(right = 8.px),
-                            checked = uiEvent.sponsored,
-                            onCheckedChange = { uiEvent = uiEvent.copy(sponsored = it) },
+                            checked = uiState.sponsored,
+                            onCheckedChange = { uiState = uiState.copy(sponsored = it) },
                             size = SwitchSize.LG
                         )
                         SpanText(
@@ -247,8 +246,8 @@ fun CreateScreen() {
                 )
 
                 CategoryDropdown(
-                    selectedCategory = uiEvent.category,
-                    onCategorySelect = { uiEvent = uiEvent.copy(category = it) }
+                    selectedCategory = uiState.category,
+                    onCategorySelect = { uiState = uiState.copy(category = it) }
                 )
 
                 Row(
@@ -258,8 +257,8 @@ fun CreateScreen() {
                 ) {
                     Switch(
                         modifier = Modifier.margin(right = 8.px),
-                        checked = !uiEvent.thumbnailInputDisabled,
-                        onCheckedChange = { uiEvent = uiEvent.copy(thumbnailInputDisabled = !it) },
+                        checked = !uiState.thumbnailInputDisabled,
+                        onCheckedChange = { uiState = uiState.copy(thumbnailInputDisabled = !it) },
                         size = SwitchSize.MD
                     )
                     SpanText(
@@ -272,14 +271,14 @@ fun CreateScreen() {
                 }
 
                 ThumbnailUploader(
-                    thumbnail = uiEvent.thumbnail,
-                    thumbnailInputDisabled = uiEvent.thumbnailInputDisabled,
+                    thumbnail = uiState.thumbnail,
+                    thumbnailInputDisabled = uiState.thumbnailInputDisabled,
                     onThumbnailSelect = { filename, file ->
 
                         (document.getElementById(Id.thumbnailInput) as HTMLInputElement).value =
                             filename
 
-                        uiEvent = uiEvent.copy(thumbnail = file)
+                        uiState = uiState.copy(thumbnail = file)
                         println(filename)
                         println(file)
                     }
@@ -287,33 +286,33 @@ fun CreateScreen() {
 
                 EditorControls(
                     breakpoint = breakpoint,
-                    editorVisibility = uiEvent.editorVisibility,
+                    editorVisibility = uiState.editorVisibility,
                     onEditorVisibilityChange = {
-                        uiEvent = uiEvent.copy(editorVisibility = !uiEvent.editorVisibility)
+                        uiState = uiState.copy(editorVisibility = !uiState.editorVisibility)
                     }
                 )
 
-                Editor(editorVisibility = uiEvent.editorVisibility)
+                Editor(editorVisibility = uiState.editorVisibility)
 
                 CreateButton(text = "Create", onClick =  {
 
-                    uiEvent =
-                        uiEvent.copy(title = (document.getElementById(Id.titleInput) as HTMLInputElement).value)
-                    uiEvent =
-                        uiEvent.copy(subtitle = (document.getElementById(Id.subtitleInput) as HTMLInputElement).value)
-                    uiEvent =
-                        uiEvent.copy(content = (document.getElementById(Id.editor) as HTMLTextAreaElement).value)
+                    uiState =
+                        uiState.copy(title = (document.getElementById(Id.titleInput) as HTMLInputElement).value)
+                    uiState =
+                        uiState.copy(subtitle = (document.getElementById(Id.subtitleInput) as HTMLInputElement).value)
+                    uiState =
+                        uiState.copy(content = (document.getElementById(Id.editor) as HTMLTextAreaElement).value)
 
-                    if (!uiEvent.thumbnailInputDisabled) {
-                        uiEvent =
-                            uiEvent.copy(thumbnail = (document.getElementById(Id.thumbnailInput) as HTMLInputElement).value)
+                    if (!uiState.thumbnailInputDisabled) {
+                        uiState =
+                            uiState.copy(thumbnail = (document.getElementById(Id.thumbnailInput) as HTMLInputElement).value)
                     }
 
                     if (
-                        uiEvent.title.isNotEmpty() &&
-                        uiEvent.subtitle.isNotEmpty() &&
-                        uiEvent.thumbnail.isNotEmpty() &&
-                        uiEvent.content.isNotEmpty()
+                        uiState.title.isNotEmpty() &&
+                        uiState.subtitle.isNotEmpty() &&
+                        uiState.thumbnail.isNotEmpty() &&
+                        uiState.content.isNotEmpty()
                     ) {
 
                        scope.launch {
@@ -321,15 +320,15 @@ fun CreateScreen() {
                            val result = addPost(
                                Post(
                                    author = localStorage["username"].toString(),
-                                   title = uiEvent.title,
-                                   subtitle = uiEvent.subtitle,
+                                   title = uiState.title,
+                                   subtitle = uiState.subtitle,
                                    date = Date.now().toLong(),
-                                   thumbnail = uiEvent.thumbnail,
-                                   content = uiEvent.content,
-                                   category = uiEvent.category,
-                                   popular = uiEvent.popular,
-                                   main = uiEvent.main,
-                                   sponsored = uiEvent.sponsored
+                                   thumbnail = uiState.thumbnail,
+                                   content = uiState.content,
+                                   category = uiState.category,
+                                   popular = uiState.popular,
+                                   main = uiState.main,
+                                   sponsored = uiState.sponsored
                                )
                            )
 
