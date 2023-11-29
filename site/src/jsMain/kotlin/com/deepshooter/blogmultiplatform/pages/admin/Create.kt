@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
+import com.deepshooter.blogmultiplatform.components.MessagePopup
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
@@ -78,6 +79,7 @@ import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.style.toModifier
 import kotlinx.browser.document
 import kotlinx.browser.localStorage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Div
@@ -100,6 +102,7 @@ data class CreatePageUiState(
     var main: Boolean = false,
     var sponsored: Boolean = false,
     var editorVisibility: Boolean = true,
+    var messagePopup: Boolean = false
 )
 
 @Page
@@ -339,13 +342,26 @@ fun CreateScreen() {
                        }
 
                     } else {
-                        println("Please fill out all fields.")
+                        scope.launch {
+                            uiState = uiState.copy(messagePopup = true)
+                            delay(2000)
+                            uiState = uiState.copy(messagePopup = false)
+                        }
                     }
 
                 })
 
             }
         }
+    }
+
+    if (uiState.messagePopup) {
+        MessagePopup(
+            message = "Please fill out all fields.",
+            onDialogDismiss = {
+                uiState = uiState.copy(messagePopup = false)
+            }
+        )
     }
 
 }
