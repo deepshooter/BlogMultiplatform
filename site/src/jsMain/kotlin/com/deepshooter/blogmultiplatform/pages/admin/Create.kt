@@ -52,6 +52,7 @@ import org.jetbrains.compose.web.dom.Ul
 import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.EditorKey
 import com.deepshooter.blogmultiplatform.models.Post
+import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
 import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.addPost
@@ -75,6 +76,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.resize
 import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
 import com.varabyte.kobweb.compose.ui.modifiers.visibility
 import com.varabyte.kobweb.compose.ui.thenIf
+import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.style.toModifier
 import kotlinx.browser.document
@@ -120,6 +122,7 @@ fun CreateScreen() {
     val scope = rememberCoroutineScope()
     val breakpoint = rememberBreakpoint()
     var uiState by remember { mutableStateOf(CreatePageUiState()) }
+    val context = rememberPageContext()
 
     AdminPageLayout {
 
@@ -336,7 +339,7 @@ fun CreateScreen() {
                            )
 
                            if (result) {
-                               println("Successful!")
+                               context.router.navigateTo(Screen.AdminSuccess.route)
                            }
 
                        }
