@@ -50,7 +50,7 @@ import org.jetbrains.compose.web.dom.Li
 import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.dom.Ul
 import com.deepshooter.blogmultiplatform.models.Category
-import com.deepshooter.blogmultiplatform.models.EditorKey
+import com.deepshooter.blogmultiplatform.models.EditorControl
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
@@ -509,9 +509,9 @@ fun EditorControls(
                     .borderRadius(r = 4.px)
                     .height(54.px)
             ) {
-                EditorKey.values().forEach {
-                    EditorKeyView(
-                        key = it,
+                EditorControl.values().forEach {
+                    EditorControlView(
+                        control = it,
                     )
                 }
             }
@@ -553,8 +553,8 @@ fun EditorControls(
 }
 
 @Composable
-fun EditorKeyView(
-    key: EditorKey,
+fun EditorControlView(
+    control: EditorControl,
 ) {
     Box(
         modifier = EditorKeyStyle.toModifier()
@@ -566,7 +566,7 @@ fun EditorKeyView(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            src = key.icon,
+            src = control.icon,
         )
     }
 }

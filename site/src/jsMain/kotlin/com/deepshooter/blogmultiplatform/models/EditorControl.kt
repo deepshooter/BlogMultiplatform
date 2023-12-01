@@ -3,7 +3,7 @@ package com.deepshooter.blogmultiplatform.models
 import com.deepshooter.blogmultiplatform.util.Res
 
 
-enum class EditorKey(
+enum class EditorControl(
     val icon: String,
 ) {
     Bold(icon = Res.Icon.bold),
