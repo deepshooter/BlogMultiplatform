@@ -56,6 +56,7 @@ import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
 import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.addPost
+import com.deepshooter.blogmultiplatform.util.applyControlStyle
 import com.deepshooter.blogmultiplatform.util.noBorder
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
@@ -512,6 +513,13 @@ fun EditorControls(
                 EditorControl.values().forEach {
                     EditorControlView(
                         control = it,
+                        onClick = {
+                            applyControlStyle(
+                                editorControl = it,
+                                onLinkClick = {},
+                                onImageClick = {}
+                            )
+                        }
                     )
                 }
             }
@@ -555,6 +563,7 @@ fun EditorControls(
 @Composable
 fun EditorControlView(
     control: EditorControl,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = EditorKeyStyle.toModifier()
@@ -562,7 +571,7 @@ fun EditorControlView(
             .padding(leftRight = 12.px)
             .borderRadius(r = 4.px)
             .cursor(Cursor.Pointer)
-            .onClick { },
+            .onClick { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Image(
