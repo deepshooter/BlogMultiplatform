@@ -55,4 +55,6 @@ object Id {
     const val editorPreview = "editorPreview"
     const val titleInput = "titleInput"
     const val subtitleInput = "subtitleInput"
+    const val linkHrefInput = "linkHrefInput"
+    const val linkTitleInput = "linkTitleInput"
 }
