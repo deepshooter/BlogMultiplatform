@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
+import com.deepshooter.blogmultiplatform.components.ControlPopup
 import com.deepshooter.blogmultiplatform.components.MessagePopup
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
@@ -50,6 +51,7 @@ import org.jetbrains.compose.web.dom.Li
 import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.dom.Ul
 import com.deepshooter.blogmultiplatform.models.Category
+import com.deepshooter.blogmultiplatform.models.ControlStyle
 import com.deepshooter.blogmultiplatform.models.EditorControl
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.navigation.Screen
@@ -57,6 +59,8 @@ import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
 import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.addPost
 import com.deepshooter.blogmultiplatform.util.applyControlStyle
+import com.deepshooter.blogmultiplatform.util.applyStyle
+import com.deepshooter.blogmultiplatform.util.getSelectedText
 import com.deepshooter.blogmultiplatform.util.noBorder
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
@@ -105,7 +109,8 @@ data class CreatePageUiState(
     var main: Boolean = false,
     var sponsored: Boolean = false,
     var editorVisibility: Boolean = true,
-    var messagePopup: Boolean = false
+    var messagePopup: Boolean = false,
+    var linkPopup: Boolean = false
 )
 
 @Page
@@ -296,6 +301,9 @@ fun CreateScreen() {
                     editorVisibility = uiState.editorVisibility,
                     onEditorVisibilityChange = {
                         uiState = uiState.copy(editorVisibility = !uiState.editorVisibility)
+                    },
+                    onLinkClick = {
+                        uiState = uiState.copy(linkPopup = true)
                     }
                 )
 
@@ -364,6 +372,22 @@ fun CreateScreen() {
             message = "Please fill out all fields.",
             onDialogDismiss = {
                 uiState = uiState.copy(messagePopup = false)
+            }
+        )
+    }
+
+    if (uiState.linkPopup) {
+        ControlPopup(
+            editorControl = EditorControl.Link,
+            onDialogDismiss = { uiState = uiState.copy(linkPopup = false) },
+            onAddClick = { href, title ->
+                applyStyle(
+                    ControlStyle.Link(
+                        selectedText = getSelectedText(),
+                        href = href,
+                        title = title
+                    )
+                )
             }
         )
     }
@@ -495,7 +519,8 @@ fun ThumbnailUploader(
 fun EditorControls(
     breakpoint: Breakpoint,
     editorVisibility: Boolean,
-    onEditorVisibilityChange: () -> Unit
+    onEditorVisibilityChange: () -> Unit,
+    onLinkClick: () -> Unit,
 ) {
 
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -516,7 +541,7 @@ fun EditorControls(
                         onClick = {
                             applyControlStyle(
                                 editorControl = it,
-                                onLinkClick = {},
+                                onLinkClick = onLinkClick,
                                 onImageClick = {}
                             )
                         }
