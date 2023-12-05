@@ -110,7 +110,8 @@ data class CreatePageUiState(
     var sponsored: Boolean = false,
     var editorVisibility: Boolean = true,
     var messagePopup: Boolean = false,
-    var linkPopup: Boolean = false
+    var linkPopup: Boolean = false,
+    var imagePopup: Boolean = false
 )
 
 @Page
@@ -304,6 +305,10 @@ fun CreateScreen() {
                     },
                     onLinkClick = {
                         uiState = uiState.copy(linkPopup = true)
+                    },
+                    onImageClick = {
+                        uiState = uiState.copy(imagePopup = true)
+
                     }
                 )
 
@@ -386,6 +391,22 @@ fun CreateScreen() {
                         selectedText = getSelectedText(),
                         href = href,
                         title = title
+                    )
+                )
+            }
+        )
+    }
+
+    if (uiState.imagePopup) {
+        ControlPopup(
+            editorControl = EditorControl.Image,
+            onDialogDismiss = { uiState = uiState.copy(imagePopup = false) },
+            onAddClick = { imageUrl, description ->
+                applyStyle(
+                    ControlStyle.Image(
+                        selectedText = getSelectedText(),
+                        imageUrl = imageUrl,
+                        desc = description
                     )
                 )
             }
@@ -521,6 +542,7 @@ fun EditorControls(
     editorVisibility: Boolean,
     onEditorVisibilityChange: () -> Unit,
     onLinkClick: () -> Unit,
+    onImageClick: () -> Unit
 ) {
 
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -542,7 +564,7 @@ fun EditorControls(
                             applyControlStyle(
                                 editorControl = it,
                                 onLinkClick = onLinkClick,
-                                onImageClick = {}
+                                onImageClick = onImageClick
                             )
                         }
                     )
