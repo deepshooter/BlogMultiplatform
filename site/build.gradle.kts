@@ -19,6 +19,13 @@ kobweb {
             description.set("Powered by Kobweb")
 
             head.add {
+                script {
+                    src = "/highlight.min.js"
+                }
+                link {
+                    rel = "stylesheet"
+                    href = "/github-dark.css"
+                }
                 link(rel = "stylesheet", href = "/fonts/faces.css")
 
                 script {
