@@ -655,7 +655,11 @@ fun Editor(editorVisibility: Boolean) {
                 )
                 .onKeyDown {
                     if (it.code == "Enter" && it.shiftKey) {
-
+                        applyStyle(
+                            controlStyle = ControlStyle.Break(
+                                selectedText = getSelectedText()
+                            )
+                        )
                     }
                 }
                 .fontFamily(FONT_FAMILY)
