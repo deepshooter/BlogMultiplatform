@@ -60,6 +60,7 @@ import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.addPost
 import com.deepshooter.blogmultiplatform.util.applyControlStyle
 import com.deepshooter.blogmultiplatform.util.applyStyle
+import com.deepshooter.blogmultiplatform.util.getEditor
 import com.deepshooter.blogmultiplatform.util.getSelectedText
 import com.deepshooter.blogmultiplatform.util.noBorder
 import com.varabyte.kobweb.compose.css.FontWeight
@@ -593,6 +594,7 @@ fun EditorControls(
                         .noBorder()
                         .onClick {
                             onEditorVisibilityChange()
+                            document.getElementById(Id.editorPreview)?.innerHTML = getEditor().value
                             js("hljs.highlightAll()") as Unit
                         }
                         .toAttrs()
