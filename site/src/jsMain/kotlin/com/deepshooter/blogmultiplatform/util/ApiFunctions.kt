@@ -1,5 +1,6 @@
 package com.deepshooter.blogmultiplatform.util
 
+import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.RandomJoke
 import com.deepshooter.blogmultiplatform.models.User
@@ -85,6 +86,22 @@ suspend fun addPost(post: Post): Boolean {
     } catch (e: Exception) {
         println(e.message)
         false
+    }
+}
+
+suspend fun fetchMyPosts(
+    skip: Int,
+    onSuccess: (ApiListResponse) -> Unit,
+    onError: (Exception) -> Unit
+) {
+    try {
+        val result = window.api.tryGet(
+            apiPath = "readmyposts?skip=$skip&author=${localStorage["username"]}"
+        )?.decodeToString()
+        onSuccess(result.parseData())
+    } catch (e: Exception) {
+        println(e)
+        onError(e)
     }
 }
 
