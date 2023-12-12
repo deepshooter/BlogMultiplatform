@@ -1,15 +1,21 @@
 package com.deepshooter.blogmultiplatform.pages.admin
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
+import com.deepshooter.blogmultiplatform.components.Posts
 import com.deepshooter.blogmultiplatform.components.SearchBar
+import com.deepshooter.blogmultiplatform.models.ApiListResponse
+import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
+import com.deepshooter.blogmultiplatform.util.fetchMyPosts
 import com.deepshooter.blogmultiplatform.util.isUserLoggedIn
 import com.deepshooter.blogmultiplatform.util.noBorder
 import com.varabyte.kobweb.compose.css.CSSTransition
@@ -66,6 +72,21 @@ fun MyPostsScreen() {
 
     var selectableMode by remember { mutableStateOf(false) }
     var switchText by remember { mutableStateOf("Select") }
+    val myPosts = remember { mutableStateListOf<PostWithoutDetails>() }
+
+    LaunchedEffect(Unit) {
+        fetchMyPosts(
+            skip = 0,
+            onSuccess = {
+                if (it is ApiListResponse.Success) {
+                    myPosts.addAll(it.data)
+                }
+            },
+            onError = {
+                println(it)
+            }
+        )
+    }
 
 
     AdminPageLayout {
@@ -147,6 +168,9 @@ fun MyPostsScreen() {
                     SpanText(text = "Delete")
                 }
             }
+
+            Posts(posts = myPosts)
+
 
         }
 
