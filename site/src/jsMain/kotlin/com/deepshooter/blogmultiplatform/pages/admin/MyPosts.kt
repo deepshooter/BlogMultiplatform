@@ -169,7 +169,10 @@ fun MyPostsScreen() {
                 }
             }
 
-            Posts(posts = myPosts)
+            Posts(
+                breakpoint = breakpoint,
+                posts = myPosts
+            )
 
 
         }
