@@ -33,8 +33,7 @@ fun CategoryChip(
                 width = 1.px,
                 style = LineStyle.Solid,
                 color = Theme.HalfBlack.rgb
-            )
-            .cursor(Cursor.Pointer),
+            ),
         contentAlignment = Alignment.Center
     ) {
         SpanText(
