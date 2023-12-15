@@ -171,6 +171,8 @@ fun MyPostsScreen() {
 
             Posts(
                 breakpoint = breakpoint,
+                showMoreVisibility = true,
+                onShowMore = {},
                 posts = myPosts
             )
 
