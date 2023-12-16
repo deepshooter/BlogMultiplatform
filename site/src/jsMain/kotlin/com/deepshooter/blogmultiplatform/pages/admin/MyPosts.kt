@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
 import com.deepshooter.blogmultiplatform.components.Posts
@@ -14,6 +15,7 @@ import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
+import com.deepshooter.blogmultiplatform.util.Constants.POSTS_PER_PAGE
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import com.deepshooter.blogmultiplatform.util.fetchMyPosts
 import com.deepshooter.blogmultiplatform.util.isUserLoggedIn
@@ -69,17 +71,23 @@ fun MyPostsPage() {
 fun MyPostsScreen() {
 
     val breakpoint = rememberBreakpoint()
+    val scope = rememberCoroutineScope()
+    val myPosts = remember { mutableStateListOf<PostWithoutDetails>() }
 
+    var postsToSkip by remember { mutableStateOf(0) }
+    var showMoreVisibility by remember { mutableStateOf(false) }
     var selectableMode by remember { mutableStateOf(false) }
     var switchText by remember { mutableStateOf("Select") }
-    val myPosts = remember { mutableStateListOf<PostWithoutDetails>() }
 
     LaunchedEffect(Unit) {
         fetchMyPosts(
-            skip = 0,
+            skip = postsToSkip,
             onSuccess = {
                 if (it is ApiListResponse.Success) {
+                    myPosts.clear()
                     myPosts.addAll(it.data)
+                    postsToSkip += POSTS_PER_PAGE
+                    showMoreVisibility = it.data.size >= POSTS_PER_PAGE
                 }
             },
             onError = {
@@ -171,8 +179,29 @@ fun MyPostsScreen() {
 
             Posts(
                 breakpoint = breakpoint,
-                showMoreVisibility = true,
-                onShowMore = {},
+                showMoreVisibility = showMoreVisibility,
+                onShowMore = {
+                    scope.launch {
+                        fetchMyPosts(
+                            skip = postsToSkip,
+                            onSuccess = {
+                                if (it is ApiListResponse.Success) {
+                                    if (it.data.isNotEmpty()) {
+                                        myPosts.addAll(it.data)
+                                        postsToSkip += POSTS_PER_PAGE
+                                        if (it.data.size < POSTS_PER_PAGE) showMoreVisibility =
+                                            false
+                                    } else {
+                                        showMoreVisibility = false
+                                    }
+                                }
+                            },
+                            onError = {
+                                println(it)
+                            }
+                        )
+                    }
+                },
                 posts = myPosts
             )
 
