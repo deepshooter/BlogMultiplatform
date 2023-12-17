@@ -20,6 +20,7 @@ import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import com.deepshooter.blogmultiplatform.util.fetchMyPosts
 import com.deepshooter.blogmultiplatform.util.isUserLoggedIn
 import com.deepshooter.blogmultiplatform.util.noBorder
+import com.deepshooter.blogmultiplatform.util.parseSwitchText
 import com.varabyte.kobweb.compose.css.CSSTransition
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TransitionProperty
@@ -73,6 +74,7 @@ fun MyPostsScreen() {
     val breakpoint = rememberBreakpoint()
     val scope = rememberCoroutineScope()
     val myPosts = remember { mutableStateListOf<PostWithoutDetails>() }
+    val selectedPosts = remember { mutableStateListOf<String>() }
 
     var postsToSkip by remember { mutableStateOf(0) }
     var showMoreVisibility by remember { mutableStateOf(false) }
@@ -151,6 +153,12 @@ fun MyPostsScreen() {
                         checked = selectableMode,
                         onCheckedChange = {
                             selectableMode = it
+                            if (!selectableMode) {
+                                switchText = "Select"
+                                selectedPosts.clear()
+                            } else {
+                                switchText = "0 Posts Selected"
+                            }
                         }
                     )
                     SpanText(
@@ -179,6 +187,16 @@ fun MyPostsScreen() {
 
             Posts(
                 breakpoint = breakpoint,
+                posts = myPosts,
+                selectableMode = selectableMode,
+                onSelect = {
+                    selectedPosts.add(it)
+                    switchText = parseSwitchText(selectedPosts.toList())
+                },
+                onDeselect = {
+                    selectedPosts.remove(it)
+                    switchText = parseSwitchText(selectedPosts.toList())
+                },
                 showMoreVisibility = showMoreVisibility,
                 onShowMore = {
                     scope.launch {
@@ -201,8 +219,7 @@ fun MyPostsScreen() {
                             }
                         )
                     }
-                },
-                posts = myPosts
+                }
             )
 
 
