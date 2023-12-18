@@ -17,6 +17,7 @@ import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Constants.POSTS_PER_PAGE
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
+import com.deepshooter.blogmultiplatform.util.deleteSelectedPosts
 import com.deepshooter.blogmultiplatform.util.fetchMyPosts
 import com.deepshooter.blogmultiplatform.util.isUserLoggedIn
 import com.deepshooter.blogmultiplatform.util.noBorder
@@ -179,7 +180,22 @@ fun MyPostsScreen() {
                         .fontSize(14.px)
                         .fontWeight(FontWeight.Medium)
                         .visibility(if (selectedPosts.isNotEmpty()) Visibility.Visible else Visibility.Hidden)
-                        .onClick {}
+                        .onClick {
+                            scope.launch {
+                                val result = deleteSelectedPosts(ids = selectedPosts)
+                                if (result) {
+                                    selectableMode = false
+                                    switchText = "Select"
+                                    postsToSkip -= selectedPosts.size
+                                    selectedPosts.forEach { deletedPostId ->
+                                        myPosts.removeAll {
+                                            it.id == deletedPostId
+                                        }
+                                    }
+                                    selectedPosts.clear()
+                                }
+                            }
+                        }
                         .toAttrs()
                 ) {
                     SpanText(text = "Delete")

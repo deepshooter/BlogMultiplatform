@@ -43,6 +43,18 @@ suspend fun readMyPosts(context: ApiContext) {
     }
 }
 
+@Api(routeOverride = "deleteselectedposts")
+suspend fun deleteSelectedPosts(context: ApiContext) {
+    try {
+        val request = context.req.getBody<List<String>>()
+        context.res.setBody(request?.let {
+            context.data.getValue<MongoDB>().deleteSelectedPosts(ids = it)
+        })
+    } catch (e: Exception) {
+        context.res.setBody(e.message)
+    }
+}
+
 inline fun <reified T> Response.setBody(data: T) {
     setBodyText(Json.encodeToString(data))
 }
