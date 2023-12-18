@@ -178,6 +178,7 @@ fun MyPostsScreen() {
                         .fontFamily(FONT_FAMILY)
                         .fontSize(14.px)
                         .fontWeight(FontWeight.Medium)
+                        .visibility(if (selectedPosts.isNotEmpty()) Visibility.Visible else Visibility.Hidden)
                         .onClick {}
                         .toAttrs()
                 ) {
