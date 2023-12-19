@@ -55,6 +55,21 @@ suspend fun deleteSelectedPosts(context: ApiContext) {
     }
 }
 
+@Api(routeOverride = "searchposts")
+suspend fun searchPostsByTitle(context: ApiContext) {
+    try {
+        val query = context.req.params["query"] ?: ""
+        val skip = context.req.params["skip"]?.toInt() ?: 0
+        val posts = context.data.getValue<MongoDB>().searchPostsByTittle(
+            query = query,
+            skip = skip
+        )
+        context.res.setBody(ApiListResponse.Success(data = posts))
+    } catch (e: Exception) {
+        context.res.setBody(ApiListResponse.Error(message = e.message.toString()))
+    }
+}
+
 inline fun <reified T> Response.setBody(data: T) {
     setBodyText(Json.encodeToString(data))
 }
