@@ -14,14 +14,18 @@ import com.deepshooter.blogmultiplatform.components.SearchBar
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.Theme
+import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Constants.POSTS_PER_PAGE
+import com.deepshooter.blogmultiplatform.util.Constants.QUERY_PARAM
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
+import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.deleteSelectedPosts
 import com.deepshooter.blogmultiplatform.util.fetchMyPosts
 import com.deepshooter.blogmultiplatform.util.isUserLoggedIn
 import com.deepshooter.blogmultiplatform.util.noBorder
 import com.deepshooter.blogmultiplatform.util.parseSwitchText
+import com.deepshooter.blogmultiplatform.util.searchPostsByTitle
 import com.varabyte.kobweb.compose.css.CSSTransition
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TransitionProperty
@@ -49,16 +53,19 @@ import com.varabyte.kobweb.compose.ui.modifiers.transition
 import com.varabyte.kobweb.compose.ui.modifiers.visibility
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.forms.Switch
 import com.varabyte.kobweb.silk.components.forms.SwitchSize
 import com.varabyte.kobweb.silk.components.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.components.text.SpanText
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
+import kotlinx.browser.document
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.ms
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Button
+import org.w3c.dom.HTMLInputElement
 
 @Page
 @Composable
@@ -72,6 +79,7 @@ fun MyPostsPage() {
 @Composable
 fun MyPostsScreen() {
 
+    val context = rememberPageContext()
     val breakpoint = rememberBreakpoint()
     val scope = rememberCoroutineScope()
     val myPosts = remember { mutableStateListOf<PostWithoutDetails>() }
@@ -82,21 +90,44 @@ fun MyPostsScreen() {
     var selectableMode by remember { mutableStateOf(false) }
     var switchText by remember { mutableStateOf("Select") }
 
-    LaunchedEffect(Unit) {
-        fetchMyPosts(
-            skip = postsToSkip,
-            onSuccess = {
-                if (it is ApiListResponse.Success) {
-                    myPosts.clear()
-                    myPosts.addAll(it.data)
-                    postsToSkip += POSTS_PER_PAGE
-                    showMoreVisibility = it.data.size >= POSTS_PER_PAGE
+    val hasParams = remember(key1 = context.route) { context.route.params.containsKey(QUERY_PARAM) }
+    val query = remember(key1 = context.route) { context.route.params[QUERY_PARAM] ?: "" }
+
+    LaunchedEffect(context.route) {
+
+        if (hasParams) {
+            postsToSkip = 0
+            searchPostsByTitle(
+                query = query,
+                skip = postsToSkip,
+                onSuccess = {
+                    if (it is ApiListResponse.Success) {
+                        myPosts.clear()
+                        myPosts.addAll(it.data)
+                        postsToSkip += POSTS_PER_PAGE
+                        showMoreVisibility = it.data.size >= POSTS_PER_PAGE
+                    }
+                },
+                onError = {
+                    println(it)
                 }
-            },
-            onError = {
-                println(it)
-            }
-        )
+            )
+        } else {
+            fetchMyPosts(
+                skip = postsToSkip,
+                onSuccess = {
+                    if (it is ApiListResponse.Success) {
+                        myPosts.clear()
+                        myPosts.addAll(it.data)
+                        postsToSkip += POSTS_PER_PAGE
+                        showMoreVisibility = it.data.size >= POSTS_PER_PAGE
+                    }
+                },
+                onError = {
+                    println(it)
+                }
+            )
+        }
     }
 
 
@@ -131,6 +162,13 @@ fun MyPostsScreen() {
                             )
                         ),
                     onEnterClick = {
+                        val searchInput =
+                            (document.getElementById(Id.adminSearchBar) as HTMLInputElement).value
+                        if (searchInput.isNotEmpty()) {
+                            context.router.navigateTo(Screen.AdminMyPosts.searchByTitle(query = searchInput))
+                        } else {
+                            context.router.navigateTo(Screen.AdminMyPosts.route)
+                        }
                     },
                     onSearchIconClick = {}
                 )
@@ -217,24 +255,47 @@ fun MyPostsScreen() {
                 showMoreVisibility = showMoreVisibility,
                 onShowMore = {
                     scope.launch {
-                        fetchMyPosts(
-                            skip = postsToSkip,
-                            onSuccess = {
-                                if (it is ApiListResponse.Success) {
-                                    if (it.data.isNotEmpty()) {
-                                        myPosts.addAll(it.data)
-                                        postsToSkip += POSTS_PER_PAGE
-                                        if (it.data.size < POSTS_PER_PAGE) showMoreVisibility =
-                                            false
-                                    } else {
-                                        showMoreVisibility = false
+
+                        if (hasParams) {
+                            searchPostsByTitle(
+                                query = query,
+                                skip = postsToSkip,
+                                onSuccess = {
+                                    if (it is ApiListResponse.Success) {
+                                        if (it.data.isNotEmpty()) {
+                                            myPosts.addAll(it.data)
+                                            postsToSkip += POSTS_PER_PAGE
+                                            if (it.data.size < POSTS_PER_PAGE) showMoreVisibility =
+                                                false
+                                        } else {
+                                            showMoreVisibility = false
+                                        }
                                     }
+                                },
+                                onError = {
+                                    println(it)
                                 }
-                            },
-                            onError = {
-                                println(it)
-                            }
-                        )
+                            )
+                        } else {
+                            fetchMyPosts(
+                                skip = postsToSkip,
+                                onSuccess = {
+                                    if (it is ApiListResponse.Success) {
+                                        if (it.data.isNotEmpty()) {
+                                            myPosts.addAll(it.data)
+                                            postsToSkip += POSTS_PER_PAGE
+                                            if (it.data.size < POSTS_PER_PAGE) showMoreVisibility =
+                                                false
+                                        } else {
+                                            showMoreVisibility = false
+                                        }
+                                    }
+                                },
+                                onError = {
+                                    println(it)
+                                }
+                            )
+                        }
                     }
                 }
             )
