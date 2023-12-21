@@ -96,6 +96,7 @@ fun MyPostsScreen() {
     LaunchedEffect(context.route) {
 
         if (hasParams) {
+            (document.getElementById(Id.adminSearchBar) as HTMLInputElement).value = query.replace("%20", " ")
             postsToSkip = 0
             searchPostsByTitle(
                 query = query,
@@ -155,12 +156,8 @@ fun MyPostsScreen() {
                 SearchBar(
                     breakpoint = breakpoint,
                     modifier = Modifier
-                        .transition(
-                            CSSTransition(
-                                property = TransitionProperty.All,
-                                duration = 200.ms
-                            )
-                        ),
+                        .visibility(if (selectableMode) Visibility.Hidden else Visibility.Visible)
+                        .transition(CSSTransition(property = TransitionProperty.All, duration = 200.ms)),
                     onEnterClick = {
                         val searchInput =
                             (document.getElementById(Id.adminSearchBar) as HTMLInputElement).value
