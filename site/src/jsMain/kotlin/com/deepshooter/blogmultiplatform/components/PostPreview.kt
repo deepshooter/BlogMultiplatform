@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.Theme
+import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.parseDateString
 import com.varabyte.kobweb.compose.css.CSSTransition
@@ -44,6 +45,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.transition
 import com.varabyte.kobweb.compose.ui.modifiers.visibility
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.compose.ui.toAttrs
+import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
@@ -64,6 +66,7 @@ fun PostPreview(
     onDeselect: (String) -> Unit = {}
 ) {
 
+    val context = rememberPageContext()
     var checked by remember(selectableMode) { mutableStateOf(false) }
 
     Column(
@@ -86,6 +89,8 @@ fun PostPreview(
                     } else {
                         onDeselect(post.id)
                     }
+                } else {
+                    context.router.navigateTo(Screen.AdminCreate.passPostId(id = post.id))
                 }
             }
             .transition(CSSTransition(property = TransitionProperty.All, duration = 200.ms))
