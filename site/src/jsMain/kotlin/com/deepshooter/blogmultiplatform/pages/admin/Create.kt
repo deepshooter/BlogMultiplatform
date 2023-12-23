@@ -1,6 +1,7 @@
 package com.deepshooter.blogmultiplatform.pages.admin
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -9,6 +10,7 @@ import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
 import com.deepshooter.blogmultiplatform.components.ControlPopup
 import com.deepshooter.blogmultiplatform.components.MessagePopup
+import com.deepshooter.blogmultiplatform.models.ApiResponse
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
@@ -56,10 +58,12 @@ import com.deepshooter.blogmultiplatform.models.EditorControl
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
+import com.deepshooter.blogmultiplatform.util.Constants.POST_ID_PARAM
 import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.addPost
 import com.deepshooter.blogmultiplatform.util.applyControlStyle
 import com.deepshooter.blogmultiplatform.util.applyStyle
+import com.deepshooter.blogmultiplatform.util.fetchSelectedPost
 import com.deepshooter.blogmultiplatform.util.getEditor
 import com.deepshooter.blogmultiplatform.util.getSelectedText
 import com.deepshooter.blogmultiplatform.util.noBorder
@@ -131,6 +135,20 @@ fun CreateScreen() {
     val breakpoint = rememberBreakpoint()
     var uiState by remember { mutableStateOf(CreatePageUiState()) }
     val context = rememberPageContext()
+
+    val hasPostIdParam = remember(key1 = context.route) {
+        context.route.params.containsKey(POST_ID_PARAM)
+    }
+
+    LaunchedEffect(hasPostIdParam) {
+        if (hasPostIdParam) {
+            val postId = context.route.params[POST_ID_PARAM] ?: ""
+            val response = fetchSelectedPost(id = postId)
+            if (response is ApiResponse.Success) {
+                println(response.data)
+            }
+        }
+    }
 
     AdminPageLayout {
 

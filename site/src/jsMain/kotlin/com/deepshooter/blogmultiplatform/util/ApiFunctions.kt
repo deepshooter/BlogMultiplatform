@@ -1,10 +1,12 @@
 package com.deepshooter.blogmultiplatform.util
 
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
+import com.deepshooter.blogmultiplatform.models.ApiResponse
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.RandomJoke
 import com.deepshooter.blogmultiplatform.models.User
 import com.deepshooter.blogmultiplatform.models.UserWithoutPassword
+import com.deepshooter.blogmultiplatform.util.Constants.POST_ID_PARAM
 import com.varabyte.kobweb.browser.api
 import com.varabyte.kobweb.compose.http.http
 import kotlinx.browser.localStorage
@@ -135,6 +137,17 @@ suspend fun searchPostsByTitle(
     }
 }
 
+suspend fun fetchSelectedPost(id: String): ApiResponse {
+    return try {
+        val result = window.api.tryGet(
+            apiPath = "readselectedpost?${POST_ID_PARAM}=$id"
+        )?.decodeToString()
+        result?.parseData() ?: ApiResponse.Error(message = "Result is null")
+    } catch (e: Exception) {
+        println(e)
+        ApiResponse.Error(message = e.message.toString())
+    }
+}
 
 inline fun <reified T> String?.parseData(): T {
     return Json.decodeFromString(this.toString())

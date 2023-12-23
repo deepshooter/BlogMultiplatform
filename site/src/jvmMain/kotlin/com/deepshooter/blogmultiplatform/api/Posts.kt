@@ -2,6 +2,7 @@ package com.deepshooter.blogmultiplatform.api
 
 import com.deepshooter.blogmultiplatform.data.MongoDB
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
+import com.deepshooter.blogmultiplatform.models.ApiResponse
 import com.deepshooter.blogmultiplatform.models.Post
 import com.varabyte.kobweb.api.Api
 import com.varabyte.kobweb.api.ApiContext
@@ -67,6 +68,21 @@ suspend fun searchPostsByTitle(context: ApiContext) {
         context.res.setBody(ApiListResponse.Success(data = posts))
     } catch (e: Exception) {
         context.res.setBody(ApiListResponse.Error(message = e.message.toString()))
+    }
+}
+
+@Api(routeOverride = "readselectedpost")
+suspend fun readSelectedPost(context: ApiContext) {
+    val postId = context.req.params["postId"]
+    if (!postId.isNullOrEmpty()) {
+        try {
+            val selectedPost = context.data.getValue<MongoDB>().readSelectedPost(id = postId)
+            context.res.setBody(ApiResponse.Success(data = selectedPost))
+        } catch (e: Exception) {
+            context.res.setBody(ApiResponse.Error(message = e.message.toString()))
+        }
+    } else {
+        context.res.setBody(ApiResponse.Error(message = "Selected Post does not exist."))
     }
 }
 
