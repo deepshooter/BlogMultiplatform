@@ -12,12 +12,12 @@ import com.deepshooter.blogmultiplatform.components.AdminPageLayout
 import com.deepshooter.blogmultiplatform.components.Posts
 import com.deepshooter.blogmultiplatform.components.SearchBar
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
+import com.deepshooter.blogmultiplatform.models.Constants.POSTS_PER_PAGE
+import com.deepshooter.blogmultiplatform.models.Constants.QUERY_PARAM
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
-import com.deepshooter.blogmultiplatform.util.Constants.POSTS_PER_PAGE
-import com.deepshooter.blogmultiplatform.util.Constants.QUERY_PARAM
 import com.deepshooter.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.deleteSelectedPosts

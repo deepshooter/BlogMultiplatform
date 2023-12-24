@@ -53,12 +53,12 @@ import org.jetbrains.compose.web.dom.Li
 import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.dom.Ul
 import com.deepshooter.blogmultiplatform.models.Category
+import com.deepshooter.blogmultiplatform.models.Constants.POST_ID_PARAM
 import com.deepshooter.blogmultiplatform.models.ControlStyle
 import com.deepshooter.blogmultiplatform.models.EditorControl
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.EditorKeyStyle
-import com.deepshooter.blogmultiplatform.util.Constants.POST_ID_PARAM
 import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.addPost
 import com.deepshooter.blogmultiplatform.util.applyControlStyle

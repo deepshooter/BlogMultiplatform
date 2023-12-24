@@ -1,10 +1,10 @@
 package com.deepshooter.blogmultiplatform.data
 
+import com.deepshooter.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.User
 import com.deepshooter.blogmultiplatform.util.Constants.DATABASE_NAME
-import com.deepshooter.blogmultiplatform.util.Constants.POSTS_PER_PAGE
 import com.mongodb.client.model.Filters
 import com.varabyte.kobweb.api.data.add
 import com.varabyte.kobweb.api.init.InitApi

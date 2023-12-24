@@ -1,7 +1,8 @@
 package com.deepshooter.blogmultiplatform.navigation
 
-import com.deepshooter.blogmultiplatform.util.Constants.POST_ID_PARAM
-import com.deepshooter.blogmultiplatform.util.Constants.QUERY_PARAM
+import com.deepshooter.blogmultiplatform.models.Constants.POST_ID_PARAM
+import com.deepshooter.blogmultiplatform.models.Constants.QUERY_PARAM
+
 
 sealed class Screen(val route: String) {
 

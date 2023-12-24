@@ -2,11 +2,14 @@ package com.deepshooter.blogmultiplatform.util
 
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.ApiResponse
+import com.deepshooter.blogmultiplatform.models.Constants.AUTHOR_PARAM
+import com.deepshooter.blogmultiplatform.models.Constants.POST_ID_PARAM
+import com.deepshooter.blogmultiplatform.models.Constants.QUERY_PARAM
+import com.deepshooter.blogmultiplatform.models.Constants.SKIP_PARAM
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.RandomJoke
 import com.deepshooter.blogmultiplatform.models.User
 import com.deepshooter.blogmultiplatform.models.UserWithoutPassword
-import com.deepshooter.blogmultiplatform.util.Constants.POST_ID_PARAM
 import com.varabyte.kobweb.browser.api
 import com.varabyte.kobweb.compose.http.http
 import kotlinx.browser.localStorage
@@ -98,7 +101,7 @@ suspend fun fetchMyPosts(
 ) {
     try {
         val result = window.api.tryGet(
-            apiPath = "readmyposts?skip=$skip&author=${localStorage["username"]}"
+            apiPath = "readmyposts?${SKIP_PARAM}=$skip&${AUTHOR_PARAM}=${localStorage["username"]}"
         )?.decodeToString()
         onSuccess(result.parseData())
     } catch (e: Exception) {
@@ -128,7 +131,7 @@ suspend fun searchPostsByTitle(
 ) {
     try {
         val result = window.api.tryGet(
-            apiPath = "searchposts?query=$query&skip=$skip"
+            apiPath = "searchposts?${QUERY_PARAM}=$query&${SKIP_PARAM}=$skip"
         )?.decodeToString()
         onSuccess(result.parseData())
     } catch (e: Exception) {
