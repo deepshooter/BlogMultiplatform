@@ -2,6 +2,7 @@ package com.deepshooter.blogmultiplatform.pages.admin
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import com.deepshooter.blogmultiplatform.models.Constants.UPDATED_PARAM
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
@@ -26,6 +27,7 @@ import org.jetbrains.compose.web.css.px
 @Composable
 fun SuccessPage() {
     val context = rememberPageContext()
+    val postUpdated = context.route.params.containsKey(UPDATED_PARAM)
     LaunchedEffect(Unit) {
         delay(5000)
         context.router.navigateTo(Screen.AdminCreate.route)
@@ -44,7 +46,7 @@ fun SuccessPage() {
             modifier = Modifier
                 .fontFamily(FONT_FAMILY)
                 .fontSize(24.px),
-            text = "Post Successfully Created!"
+            text = if (postUpdated) "Post Successfully Updated!" else "Post Successfully Created!"
         )
         SpanText(
             modifier = Modifier
