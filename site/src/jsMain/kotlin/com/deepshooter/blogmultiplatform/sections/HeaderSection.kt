@@ -41,6 +41,7 @@ import org.jetbrains.compose.web.css.px
 fun HeaderSection(
     breakpoint: Breakpoint,
     selectedCategory: Category? = null,
+    onMenuOpen: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -57,7 +58,8 @@ fun HeaderSection(
         ) {
             Header(
                 breakpoint = breakpoint,
-                selectedCategory = selectedCategory
+                selectedCategory = selectedCategory,
+                onMenuOpen = onMenuOpen
             )
         }
     }
@@ -66,7 +68,8 @@ fun HeaderSection(
 @Composable
 fun Header(
     breakpoint: Breakpoint,
-    selectedCategory: Category?
+    selectedCategory: Category?,
+    onMenuOpen: () -> Unit
 ) {
     val context = rememberPageContext()
     var fullSearchBarOpened by remember { mutableStateOf(false) }
@@ -93,7 +96,7 @@ fun Header(
                         .margin(right = 24.px)
                         .color(Colors.White)
                         .cursor(Cursor.Pointer)
-                        .onClick { },
+                        .onClick { onMenuOpen() },
                     size = IconSize.XL
                 )
             }

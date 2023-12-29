@@ -1,6 +1,9 @@
 package com.deepshooter.blogmultiplatform.pages
 
 import androidx.compose.runtime.*
+import com.deepshooter.blogmultiplatform.components.CategoryNavigationItems
+import com.deepshooter.blogmultiplatform.components.NavigationItems
+import com.deepshooter.blogmultiplatform.components.OverflowSidePanel
 import com.deepshooter.blogmultiplatform.sections.HeaderSection
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -15,6 +18,7 @@ import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 fun HomePage() {
 
     val breakpoint = rememberBreakpoint()
+    var overflowOpened by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -22,7 +26,21 @@ fun HomePage() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        HeaderSection(breakpoint = breakpoint)
+        if (overflowOpened) {
+            OverflowSidePanel(
+                onMenuClose = {
+                    overflowOpened = false
+                },
+                content = {
+                    CategoryNavigationItems(vertical = true)
+                }
+            )
+        }
+
+        HeaderSection(
+            breakpoint = breakpoint,
+            onMenuOpen = { overflowOpened = true }
+        )
 
     }
 

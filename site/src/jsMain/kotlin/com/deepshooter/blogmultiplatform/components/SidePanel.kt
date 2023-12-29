@@ -106,7 +106,7 @@ private fun SidePanelInternal() {
 }
 
 @Composable
-private fun NavigationItems() {
+fun NavigationItems() {
 
     val context = rememberPageContext()
 
@@ -255,7 +255,8 @@ private fun CollapsedSidePanel(onMenuClick: () -> Unit) {
 
 @Composable
 fun OverflowSidePanel(
-    onMenuClose: () -> Unit
+    onMenuClose: () -> Unit,
+    content: @Composable () -> Unit
 ) {
 
     val breakpoint = rememberBreakpoint()
@@ -331,7 +332,7 @@ fun OverflowSidePanel(
                 )
             }
 
-            NavigationItems()
+            content()
 
         }
     }
