@@ -5,6 +5,7 @@ import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.User
 import com.deepshooter.blogmultiplatform.util.Constants.DATABASE_NAME
+import com.deepshooter.blogmultiplatform.util.Constants.MAIN_POSTS_LIMIT
 import com.mongodb.client.model.Filters
 import com.varabyte.kobweb.api.data.add
 import com.varabyte.kobweb.api.init.InitApi
@@ -15,6 +16,7 @@ import org.litote.kmongo.coroutine.toList
 import com.mongodb.client.model.Indexes.descending
 import com.mongodb.client.model.Updates
 import kotlinx.coroutines.reactive.awaitLast
+import org.litote.kmongo.descending
 import org.litote.kmongo.eq
 import org.litote.kmongo.`in`
 import org.litote.kmongo.reactivestreams.KMongo
@@ -67,6 +69,15 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
             .sort(descending(PostWithoutDetails::date.name))
             .skip(skip)
             .limit(POSTS_PER_PAGE)
+            .toList()
+    }
+
+    override suspend fun readMainPosts(): List<PostWithoutDetails> {
+        return postCollection
+            .withDocumentClass(PostWithoutDetails::class.java)
+            .find(PostWithoutDetails::main eq true)
+            .sort(descending(PostWithoutDetails::date))
+            .limit(MAIN_POSTS_LIMIT)
             .toList()
     }
 

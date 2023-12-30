@@ -4,7 +4,9 @@ import androidx.compose.runtime.*
 import com.deepshooter.blogmultiplatform.components.CategoryNavigationItems
 import com.deepshooter.blogmultiplatform.components.NavigationItems
 import com.deepshooter.blogmultiplatform.components.OverflowSidePanel
+import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.sections.HeaderSection
+import com.deepshooter.blogmultiplatform.util.fetchMainPosts
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.ui.Alignment
@@ -17,8 +19,19 @@ import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 @Composable
 fun HomePage() {
 
+    val scope = rememberCoroutineScope()
     val breakpoint = rememberBreakpoint()
     var overflowOpened by remember { mutableStateOf(false) }
+    var mainPosts by remember { mutableStateOf<ApiListResponse>(ApiListResponse.Idle) }
+
+    LaunchedEffect(Unit) {
+
+        fetchMainPosts(
+            onSuccess = { mainPosts = it },
+            onError = {}
+        )
+
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
