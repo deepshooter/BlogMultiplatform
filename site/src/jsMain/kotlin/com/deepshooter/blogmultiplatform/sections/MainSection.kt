@@ -1,6 +1,7 @@
 package com.deepshooter.blogmultiplatform.sections
 
 import androidx.compose.runtime.Composable
+import com.deepshooter.blogmultiplatform.components.PostPreview
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.Theme
@@ -25,7 +26,6 @@ fun MainSection(
     posts: ApiListResponse,
     onClick: (String) -> Unit
 ) {
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,7 +52,6 @@ fun MainSection(
             }
         }
     }
-
 }
 
 @Composable
@@ -70,25 +69,46 @@ fun MainPosts(
             .margin(topBottom = 50.px)
     ) {
         if (breakpoint == Breakpoint.XL) {
-            //
+            PostPreview(
+                post = posts.first(),
+                darkTheme = true,
+                thumbnailHeight = 640.px
+            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth(80.percent)
                     .margin(left = 20.px)
             ) {
                 posts.drop(1).forEach { postWithoutDetails ->
-                    //
+                    PostPreview(
+                        modifier = Modifier.margin(bottom = 20.px),
+                        post = postWithoutDetails,
+                        darkTheme = true,
+                        vertical = false,
+                        thumbnailHeight = 200.px,
+                        titleMaxLines = 1
+                    )
                 }
             }
         } else if (breakpoint >= Breakpoint.LG) {
             Box(modifier = Modifier.margin(right = 10.px)) {
-                //
+                PostPreview(
+                    post = posts.first(),
+                    darkTheme = true
+                )
             }
             Box(modifier = Modifier.margin(left = 10.px)) {
-                //
+                PostPreview(
+                    post = posts[1],
+                    darkTheme = true
+                )
             }
         } else {
-            //
+            PostPreview(
+                post = posts.first(),
+                darkTheme = true,
+                thumbnailHeight = 640.px
+            )
         }
     }
 }

@@ -6,6 +6,7 @@ import com.deepshooter.blogmultiplatform.components.NavigationItems
 import com.deepshooter.blogmultiplatform.components.OverflowSidePanel
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.sections.HeaderSection
+import com.deepshooter.blogmultiplatform.sections.MainSection
 import com.deepshooter.blogmultiplatform.util.fetchMainPosts
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -53,6 +54,12 @@ fun HomePage() {
         HeaderSection(
             breakpoint = breakpoint,
             onMenuOpen = { overflowOpened = true }
+        )
+
+        MainSection(
+            breakpoint = breakpoint,
+            posts = mainPosts,
+            onClick = {}
         )
 
     }

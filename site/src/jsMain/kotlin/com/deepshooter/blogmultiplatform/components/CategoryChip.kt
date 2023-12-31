@@ -22,7 +22,8 @@ import org.jetbrains.compose.web.css.px
 
 @Composable
 fun CategoryChip(
-    category: Category
+    category: Category,
+    darkTheme: Boolean = false
 ) {
     Box(
         modifier = Modifier
@@ -32,7 +33,7 @@ fun CategoryChip(
             .border(
                 width = 1.px,
                 style = LineStyle.Solid,
-                color = Theme.HalfBlack.rgb
+                color = if(darkTheme) Theme.values().find { it.hex == Theme.Green.hex }?.rgb else Theme.HalfBlack.rgb
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -40,7 +41,11 @@ fun CategoryChip(
             modifier = Modifier
                 .fontFamily(FONT_FAMILY)
                 .fontSize(12.px)
-                .color(Theme.HalfBlack.rgb),
+                .color(
+                    if (darkTheme) Theme.values().find { it.hex == Theme.Yellow.hex }?.rgb
+                        ?: Theme.HalfBlack.rgb
+                    else Theme.HalfBlack.rgb
+                ),
             text = category.name
         )
     }
