@@ -5,8 +5,11 @@ import com.deepshooter.blogmultiplatform.components.CategoryNavigationItems
 import com.deepshooter.blogmultiplatform.components.NavigationItems
 import com.deepshooter.blogmultiplatform.components.OverflowSidePanel
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
+import com.deepshooter.blogmultiplatform.models.Constants.POSTS_PER_PAGE
+import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.sections.HeaderSection
 import com.deepshooter.blogmultiplatform.sections.MainSection
+import com.deepshooter.blogmultiplatform.util.fetchLatestPosts
 import com.deepshooter.blogmultiplatform.util.fetchMainPosts
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -24,11 +27,22 @@ fun HomePage() {
     val breakpoint = rememberBreakpoint()
     var overflowOpened by remember { mutableStateOf(false) }
     var mainPosts by remember { mutableStateOf<ApiListResponse>(ApiListResponse.Idle) }
+    var latestPosts by remember { mutableStateOf<ApiListResponse>(ApiListResponse.Idle) }
+    var latestPostsToSkip by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
 
         fetchMainPosts(
             onSuccess = { mainPosts = it },
+            onError = {}
+        )
+
+        fetchLatestPosts(
+            skip = latestPostsToSkip,
+            onSuccess = {
+                latestPosts = it
+                println(it)
+            },
             onError = {}
         )
 
