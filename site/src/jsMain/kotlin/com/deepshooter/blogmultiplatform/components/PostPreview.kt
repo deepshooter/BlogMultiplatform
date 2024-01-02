@@ -77,7 +77,8 @@ fun PostPreview(
     titleMaxLines: Int = 2,
     titleColor: CSSColorValue = Colors.Black,
     onSelect: (String) -> Unit = {},
-    onDeselect: (String) -> Unit = {}
+    onDeselect: (String) -> Unit = {},
+    onClick: (String) -> Unit
 ) {
 
     val context = rememberPageContext()
@@ -117,7 +118,7 @@ fun PostPreview(
                             onDeselect(post.id)
                         }
                     } else {
-                        context.router.navigateTo(Screen.AdminCreate.passPostId(id = post.id))
+                        onClick(post.id)
                     }
                 }
                 .transition(CSSTransition(property = TransitionProperty.All, duration = 200.ms))

@@ -295,7 +295,9 @@ fun MyPostsScreen() {
                         }
                     }
                 },
-                onClick = {}
+                onClick = {
+                    context.router.navigateTo(Screen.AdminCreate.passPostId(id = it))
+                }
             )
 
 

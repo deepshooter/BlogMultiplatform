@@ -65,7 +65,8 @@ fun PostsView(
                     post = it,
                     selectableMode = selectableMode,
                     onSelect = onSelect,
-                    onDeselect = onDeselect
+                    onDeselect = onDeselect,
+                    onClick = onClick
                 )
             }
         }

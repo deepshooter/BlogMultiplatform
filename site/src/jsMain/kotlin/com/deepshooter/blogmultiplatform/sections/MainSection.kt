@@ -72,7 +72,8 @@ fun MainPosts(
             PostPreview(
                 post = posts.first(),
                 darkTheme = true,
-                thumbnailHeight = 640.px
+                thumbnailHeight = 640.px,
+                onClick = {}
             )
             Column(
                 modifier = Modifier
@@ -86,7 +87,8 @@ fun MainPosts(
                         darkTheme = true,
                         vertical = false,
                         thumbnailHeight = 200.px,
-                        titleMaxLines = 1
+                        titleMaxLines = 1,
+                        onClick = {}
                     )
                 }
             }
@@ -94,20 +96,23 @@ fun MainPosts(
             Box(modifier = Modifier.margin(right = 10.px)) {
                 PostPreview(
                     post = posts.first(),
-                    darkTheme = true
+                    darkTheme = true,
+                    onClick = {}
                 )
             }
             Box(modifier = Modifier.margin(left = 10.px)) {
                 PostPreview(
                     post = posts[1],
-                    darkTheme = true
+                    darkTheme = true,
+                    onClick = {}
                 )
             }
         } else {
             PostPreview(
                 post = posts.first(),
                 darkTheme = true,
-                thumbnailHeight = 640.px
+                thumbnailHeight = 640.px,
+                onClick = {}
             )
         }
     }
