@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.AdminPageLayout
-import com.deepshooter.blogmultiplatform.components.Posts
+import com.deepshooter.blogmultiplatform.components.PostsView
 import com.deepshooter.blogmultiplatform.components.SearchBar
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.Constants.POSTS_PER_PAGE
@@ -237,7 +237,7 @@ fun MyPostsScreen() {
                 }
             }
 
-            Posts(
+            PostsView(
                 breakpoint = breakpoint,
                 posts = myPosts,
                 selectableMode = selectableMode,
@@ -294,7 +294,8 @@ fun MyPostsScreen() {
                             )
                         }
                     }
-                }
+                },
+                onClick = {}
             )
 
 
