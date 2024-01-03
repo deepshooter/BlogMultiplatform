@@ -12,6 +12,7 @@ import com.deepshooter.blogmultiplatform.sections.MainSection
 import com.deepshooter.blogmultiplatform.sections.PostsSection
 import com.deepshooter.blogmultiplatform.util.fetchLatestPosts
 import com.deepshooter.blogmultiplatform.util.fetchMainPosts
+import com.deepshooter.blogmultiplatform.util.fetchSponsoredPosts
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.ui.Alignment
@@ -30,6 +31,7 @@ fun HomePage() {
     var overflowOpened by remember { mutableStateOf(false) }
     var mainPosts by remember { mutableStateOf<ApiListResponse>(ApiListResponse.Idle) }
     val latestPosts = remember { mutableStateListOf<PostWithoutDetails>() }
+    val sponsoredPosts = remember { mutableStateListOf<PostWithoutDetails>() }
     var latestPostsToSkip by remember { mutableStateOf(0) }
     var showMoreLatest by remember { mutableStateOf(false) }
 
@@ -47,6 +49,15 @@ fun HomePage() {
                     latestPosts.addAll(response.data)
                     latestPostsToSkip += POSTS_PER_PAGE
                     if (response.data.size >= POSTS_PER_PAGE) showMoreLatest = true
+                }
+            },
+            onError = {}
+        )
+
+        fetchSponsoredPosts(
+            onSuccess = { response ->
+                if (response is ApiListResponse.Success) {
+                    sponsoredPosts.addAll(response.data)
                 }
             },
             onError = {}
