@@ -7,9 +7,11 @@ import com.deepshooter.blogmultiplatform.components.OverflowSidePanel
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
+import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.sections.HeaderSection
 import com.deepshooter.blogmultiplatform.sections.MainSection
 import com.deepshooter.blogmultiplatform.sections.PostsSection
+import com.deepshooter.blogmultiplatform.sections.SponsoredPostsSection
 import com.deepshooter.blogmultiplatform.util.fetchLatestPosts
 import com.deepshooter.blogmultiplatform.util.fetchMainPosts
 import com.deepshooter.blogmultiplatform.util.fetchSponsoredPosts
@@ -19,6 +21,7 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import kotlinx.coroutines.launch
 
@@ -26,6 +29,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomePage() {
 
+    val context = rememberPageContext()
     val scope = rememberCoroutineScope()
     val breakpoint = rememberBreakpoint()
     var overflowOpened by remember { mutableStateOf(false) }
@@ -120,6 +124,12 @@ fun HomePage() {
                 }
             },
             onClick = { }
+        )
+
+        SponsoredPostsSection(
+            breakpoint = breakpoint,
+            posts = sponsoredPosts,
+            onClick = { context.router.navigateTo(Screen.PostPage.getPost(id = it)) }
         )
 
     }

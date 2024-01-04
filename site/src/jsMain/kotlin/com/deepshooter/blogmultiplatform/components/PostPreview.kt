@@ -148,7 +148,7 @@ fun PostPreview(
                 )
                 .then(modifier)
                 .height(thumbnailHeight)
-                .onClick { }
+                .onClick { onClick(post.id) }
                 .cursor(Cursor.Pointer)
         ) {
             PostContent(

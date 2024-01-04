@@ -19,4 +19,8 @@ sealed class Screen(val route: String) {
         fun postUpdated() = "/admin/success?${UPDATED_PARAM}=true"
     }
 
+    object PostPage : Screen(route = "/posts/post") {
+        fun getPost(id: String) = "/posts/post?${POST_ID_PARAM}=$id"
+    }
+
 }
