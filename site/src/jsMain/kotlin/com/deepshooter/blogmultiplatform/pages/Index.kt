@@ -14,6 +14,7 @@ import com.deepshooter.blogmultiplatform.sections.PostsSection
 import com.deepshooter.blogmultiplatform.sections.SponsoredPostsSection
 import com.deepshooter.blogmultiplatform.util.fetchLatestPosts
 import com.deepshooter.blogmultiplatform.util.fetchMainPosts
+import com.deepshooter.blogmultiplatform.util.fetchPopularPosts
 import com.deepshooter.blogmultiplatform.util.fetchSponsoredPosts
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -36,8 +37,11 @@ fun HomePage() {
     var mainPosts by remember { mutableStateOf<ApiListResponse>(ApiListResponse.Idle) }
     val latestPosts = remember { mutableStateListOf<PostWithoutDetails>() }
     val sponsoredPosts = remember { mutableStateListOf<PostWithoutDetails>() }
+    val popularPosts = remember { mutableStateListOf<PostWithoutDetails>() }
     var latestPostsToSkip by remember { mutableStateOf(0) }
+    var popularPostsToSkip by remember { mutableStateOf(0) }
     var showMoreLatest by remember { mutableStateOf(false) }
+    var showMorePopular by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
 
@@ -62,6 +66,18 @@ fun HomePage() {
             onSuccess = { response ->
                 if (response is ApiListResponse.Success) {
                     sponsoredPosts.addAll(response.data)
+                }
+            },
+            onError = {}
+        )
+
+        fetchPopularPosts(
+            skip = popularPostsToSkip,
+            onSuccess = { response ->
+                if (response is ApiListResponse.Success) {
+                    popularPosts.addAll(response.data)
+                    popularPostsToSkip += POSTS_PER_PAGE
+                    if (response.data.size >= POSTS_PER_PAGE) showMorePopular = true
                 }
             },
             onError = {}
