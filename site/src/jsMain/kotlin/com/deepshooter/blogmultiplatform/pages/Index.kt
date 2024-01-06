@@ -148,6 +148,35 @@ fun HomePage() {
             onClick = { context.router.navigateTo(Screen.PostPage.getPost(id = it)) }
         )
 
+        PostsSection(
+            breakpoint = breakpoint,
+            posts = popularPosts,
+            title = "Popular Posts",
+            showMoreVisibility = showMorePopular,
+            onShowMore = {
+                scope.launch {
+                    fetchPopularPosts(
+                        skip = popularPostsToSkip,
+                        onSuccess = { response ->
+                            if (response is ApiListResponse.Success) {
+                                if (response.data.isNotEmpty()) {
+                                    if (response.data.size < POSTS_PER_PAGE) {
+                                        showMorePopular = false
+                                    }
+                                    popularPosts.addAll(response.data)
+                                    popularPostsToSkip += POSTS_PER_PAGE
+                                } else {
+                                    showMorePopular = false
+                                }
+                            }
+                        },
+                        onError = {}
+                    )
+                }
+            },
+            onClick = { context.router.navigateTo(Screen.PostPage.getPost(id = it)) }
+        )
+
     }
 
 }
