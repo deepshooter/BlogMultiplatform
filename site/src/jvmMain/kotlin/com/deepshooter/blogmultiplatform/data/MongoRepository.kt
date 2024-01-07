@@ -1,5 +1,6 @@
 package com.deepshooter.blogmultiplatform.data
 
+import com.deepshooter.blogmultiplatform.models.Newsletter
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.User
@@ -18,4 +19,5 @@ interface MongoRepository {
     suspend fun readSelectedPost(id: String): Post
     suspend fun checkUserExistence(user: User): User?
     suspend fun checkUserId(id: String): Boolean
+    suspend fun subscribe(newsletter: Newsletter): String
 }
