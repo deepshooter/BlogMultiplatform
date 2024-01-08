@@ -10,6 +10,7 @@ import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.sections.HeaderSection
 import com.deepshooter.blogmultiplatform.sections.MainSection
+import com.deepshooter.blogmultiplatform.sections.NewsletterSection
 import com.deepshooter.blogmultiplatform.sections.PostsSection
 import com.deepshooter.blogmultiplatform.sections.SponsoredPostsSection
 import com.deepshooter.blogmultiplatform.util.fetchLatestPosts
@@ -176,6 +177,8 @@ fun HomePage() {
             },
             onClick = { context.router.navigateTo(Screen.PostPage.getPost(id = it)) }
         )
+
+        NewsletterSection(breakpoint = breakpoint)
 
     }
 
