@@ -1,5 +1,6 @@
 package com.deepshooter.blogmultiplatform.data
 
+import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import com.deepshooter.blogmultiplatform.models.Newsletter
 import com.deepshooter.blogmultiplatform.models.Post
@@ -22,6 +23,7 @@ import org.litote.kmongo.eq
 import org.litote.kmongo.`in`
 import org.litote.kmongo.reactivestreams.KMongo
 import org.litote.kmongo.reactivestreams.getCollection
+import org.litote.kmongo.regex
 import org.litote.kmongo.setValue
 
 
@@ -124,12 +126,25 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
             .wasAcknowledged()
     }
 
+    override suspend fun searchPostsByCategory(
+        category: Category,
+        skip: Int
+    ): List<PostWithoutDetails> {
+        return postCollection
+            .withDocumentClass(PostWithoutDetails::class.java)
+            .find(PostWithoutDetails::category eq category)
+            .sort(descending(PostWithoutDetails::date))
+            .skip(skip)
+            .limit(POSTS_PER_PAGE)
+            .toList()
+    }
+
     override suspend fun searchPostsByTittle(query: String, skip: Int): List<PostWithoutDetails> {
         val regexQuery = query.toRegex(RegexOption.IGNORE_CASE)
         return postCollection
             .withDocumentClass(PostWithoutDetails::class.java)
-            .find(Filters.regex(PostWithoutDetails::title.name, regexQuery.pattern))
-            .sort(descending(PostWithoutDetails::date.name))
+            .find(PostWithoutDetails::title regex regexQuery.pattern)
+            .sort(descending(PostWithoutDetails::date))
             .skip(skip)
             .limit(POSTS_PER_PAGE)
             .toList()

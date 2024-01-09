@@ -3,7 +3,9 @@ package com.deepshooter.blogmultiplatform.api
 import com.deepshooter.blogmultiplatform.data.MongoDB
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.ApiResponse
+import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Constants.AUTHOR_PARAM
+import com.deepshooter.blogmultiplatform.models.Constants.CATEGORY_PARAM
 import com.deepshooter.blogmultiplatform.models.Constants.POST_ID_PARAM
 import com.deepshooter.blogmultiplatform.models.Constants.QUERY_PARAM
 import com.deepshooter.blogmultiplatform.models.Constants.SKIP_PARAM
@@ -123,6 +125,22 @@ suspend fun searchPostsByTitle(context: ApiContext) {
         val skip = context.req.params[SKIP_PARAM]?.toInt() ?: 0
         val posts = context.data.getValue<MongoDB>().searchPostsByTittle(
             query = query,
+            skip = skip
+        )
+        context.res.setBody(ApiListResponse.Success(data = posts))
+    } catch (e: Exception) {
+        context.res.setBody(ApiListResponse.Error(message = e.message.toString()))
+    }
+}
+
+@Api(routeOverride = "searchpostsbycategory")
+suspend fun searchPostsByCategory(context: ApiContext) {
+    try {
+        val category =
+            Category.valueOf(context.req.params[CATEGORY_PARAM] ?: Category.Programming.name)
+        val skip = context.req.params[SKIP_PARAM]?.toInt() ?: 0
+        val posts = context.data.getValue<MongoDB>().searchPostsByCategory(
+            category = category,
             skip = skip
         )
         context.res.setBody(ApiListResponse.Success(data = posts))

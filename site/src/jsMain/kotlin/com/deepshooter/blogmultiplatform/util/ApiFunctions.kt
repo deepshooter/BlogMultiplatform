@@ -2,7 +2,9 @@ package com.deepshooter.blogmultiplatform.util
 
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.ApiResponse
+import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Constants.AUTHOR_PARAM
+import com.deepshooter.blogmultiplatform.models.Constants.CATEGORY_PARAM
 import com.deepshooter.blogmultiplatform.models.Constants.POST_ID_PARAM
 import com.deepshooter.blogmultiplatform.models.Constants.QUERY_PARAM
 import com.deepshooter.blogmultiplatform.models.Constants.SKIP_PARAM
@@ -201,6 +203,23 @@ suspend fun searchPostsByTitle(
     try {
         val result = window.api.tryGet(
             apiPath = "searchposts?${QUERY_PARAM}=$query&${SKIP_PARAM}=$skip"
+        )?.decodeToString()
+        onSuccess(result.parseData())
+    } catch (e: Exception) {
+        println(e.message)
+        onError(e)
+    }
+}
+
+suspend fun searchPostsByCategory(
+    category: Category,
+    skip: Int,
+    onSuccess: (ApiListResponse) -> Unit,
+    onError: (Exception) -> Unit
+) {
+    try {
+        val result = window.api.tryGet(
+            apiPath = "searchpostsbycategory?${CATEGORY_PARAM}=${category.name}&${SKIP_PARAM}=$skip"
         )?.decodeToString()
         onSuccess(result.parseData())
     } catch (e: Exception) {

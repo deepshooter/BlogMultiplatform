@@ -1,5 +1,6 @@
 package com.deepshooter.blogmultiplatform.data
 
+import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Newsletter
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
@@ -15,6 +16,7 @@ interface MongoRepository {
     suspend fun readSponsoredPosts(): List<PostWithoutDetails>
     suspend fun readPopularPosts(skip: Int): List<PostWithoutDetails>
     suspend fun deleteSelectedPosts(ids: List<String>): Boolean
+    suspend fun searchPostsByCategory(category: Category, skip: Int): List<PostWithoutDetails>
     suspend fun searchPostsByTittle(query: String, skip: Int): List<PostWithoutDetails>
     suspend fun readSelectedPost(id: String): Post
     suspend fun checkUserExistence(user: User): User?
