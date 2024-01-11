@@ -3,6 +3,7 @@ package com.deepshooter.blogmultiplatform.components
 import androidx.compose.runtime.Composable
 import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Theme
+import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.styles.CategoryItemStyle
 import com.deepshooter.blogmultiplatform.util.Constants
 import com.varabyte.kobweb.compose.css.FontWeight
@@ -46,7 +47,7 @@ fun CategoryNavigationItems(
                 .fontSize(16.px)
                 .fontWeight(FontWeight.Medium)
                 .textDecorationLine(TextDecorationLine.None)
-                .onClick { },
+                .onClick { context.router.navigateTo(Screen.SearchPage.searchByCategory(category)) },
             path = "",
             text = category.name
         )
