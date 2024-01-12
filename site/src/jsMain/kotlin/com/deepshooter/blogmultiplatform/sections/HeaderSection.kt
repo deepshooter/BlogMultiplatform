@@ -9,6 +9,7 @@ import com.deepshooter.blogmultiplatform.components.CategoryNavigationItems
 import com.deepshooter.blogmultiplatform.components.SearchBar
 import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Theme
+import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.util.Constants.HEADER_HEIGHT
 import com.deepshooter.blogmultiplatform.util.Constants.PAGE_WIDTH
 import com.deepshooter.blogmultiplatform.util.Res
@@ -110,7 +111,7 @@ fun Header(
                     .margin(right = 50.px)
                     .width(if (breakpoint >= Breakpoint.SM) 100.px else 70.px)
                     .cursor(Cursor.Pointer)
-                    .onClick { },
+                    .onClick { context.router.navigateTo(Screen.HomePage.route) },
                 src = logo
             )
         }
