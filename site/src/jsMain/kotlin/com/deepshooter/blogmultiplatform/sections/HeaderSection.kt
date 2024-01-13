@@ -12,6 +12,7 @@ import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.util.Constants.HEADER_HEIGHT
 import com.deepshooter.blogmultiplatform.util.Constants.PAGE_WIDTH
+import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.Res
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -35,8 +36,10 @@ import com.varabyte.kobweb.silk.components.icons.fa.FaBars
 import com.varabyte.kobweb.silk.components.icons.fa.FaXmark
 import com.varabyte.kobweb.silk.components.icons.fa.IconSize
 import com.varabyte.kobweb.silk.components.style.breakpoint.Breakpoint
+import kotlinx.browser.document
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
+import org.w3c.dom.HTMLInputElement
 
 @Composable
 fun HeaderSection(
@@ -124,7 +127,8 @@ fun Header(
             fullWidth = fullSearchBarOpened,
             darkTheme = true,
             onEnterClick = {
-
+                val query = (document.getElementById(Id.adminSearchBar) as HTMLInputElement).value
+                context.router.navigateTo(Screen.SearchPage.searchByTitle(query = query))
             },
             onSearchIconClick = { fullSearchBarOpened = it }
         )

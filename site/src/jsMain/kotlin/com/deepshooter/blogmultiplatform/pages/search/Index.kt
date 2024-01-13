@@ -94,6 +94,22 @@ fun SearchPage() {
                 },
                 onError = {}
             )
+        } else if (hasQueryParam) {
+            (document.getElementById(Id.adminSearchBar) as HTMLInputElement).value = value
+            searchPostsByTitle(
+                query = value,
+                skip = postsToSkip,
+                onSuccess = { response ->
+                    apiResponse = response
+                    if (response is ApiListResponse.Success) {
+                        searchedPosts.clear()
+                        searchedPosts.addAll(response.data)
+                        postsToSkip += POSTS_PER_PAGE
+                        if (response.data.size >= POSTS_PER_PAGE) showMorePosts = true
+                    }
+                },
+                onError = {}
+            )
         }
     }
 
