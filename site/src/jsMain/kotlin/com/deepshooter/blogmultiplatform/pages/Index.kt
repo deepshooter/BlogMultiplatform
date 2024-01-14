@@ -111,7 +111,7 @@ fun HomePage() {
         MainSection(
             breakpoint = breakpoint,
             posts = mainPosts,
-            onClick = {}
+            onClick = { context.router.navigateTo(Screen.PostPage.getPost(id = it)) }
         )
 
         PostsSection(
@@ -140,7 +140,9 @@ fun HomePage() {
                     )
                 }
             },
-            onClick = { }
+            onClick = {
+                context.router.navigateTo(Screen.PostPage.getPost(id = it))
+            }
         )
 
         SponsoredPostsSection(
