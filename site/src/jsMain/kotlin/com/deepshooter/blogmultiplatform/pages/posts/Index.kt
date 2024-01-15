@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.CategoryNavigationItems
+import com.deepshooter.blogmultiplatform.components.ErrorView
 import com.deepshooter.blogmultiplatform.components.LoadingIndicator
 import com.deepshooter.blogmultiplatform.components.OverflowSidePanel
 import com.deepshooter.blogmultiplatform.models.ApiResponse
@@ -122,7 +123,7 @@ fun PostPage() {
             }
 
             is ApiResponse.Error -> {
-
+                ErrorView(message = (apiResponse as ApiResponse.Error).message)
             }
         }
         if (showSections) {
