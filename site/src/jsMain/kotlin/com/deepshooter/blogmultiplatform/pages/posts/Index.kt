@@ -15,6 +15,7 @@ import com.deepshooter.blogmultiplatform.models.ApiResponse
 import com.deepshooter.blogmultiplatform.models.Constants.POST_ID_PARAM
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.Theme
+import com.deepshooter.blogmultiplatform.sections.FooterSection
 import com.deepshooter.blogmultiplatform.sections.HeaderSection
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
 import com.deepshooter.blogmultiplatform.util.Id
@@ -127,7 +128,7 @@ fun PostPage() {
             }
         }
         if (showSections) {
-
+            FooterSection()
         }
     }
 }

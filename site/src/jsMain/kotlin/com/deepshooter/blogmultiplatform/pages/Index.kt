@@ -8,6 +8,7 @@ import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.navigation.Screen
+import com.deepshooter.blogmultiplatform.sections.FooterSection
 import com.deepshooter.blogmultiplatform.sections.HeaderSection
 import com.deepshooter.blogmultiplatform.sections.MainSection
 import com.deepshooter.blogmultiplatform.sections.NewsletterSection
@@ -181,6 +182,8 @@ fun HomePage() {
         )
 
         NewsletterSection(breakpoint = breakpoint)
+
+        FooterSection()
 
     }
 
