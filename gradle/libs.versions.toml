@@ -2,6 +2,7 @@
 jetbrains-compose = "1.5.1"
 kobweb = "0.14.2"
 kotlin = "1.9.10"
+agp = "8.0.0"
 kmongo = "4.9.0"
 serialization = "1.5.1"
 
@@ -22,3 +23,5 @@ kobweb-library = { id = "com.varabyte.kobweb.library", version.ref = "kobweb" }
 kobwebx-markdown = { id = "com.varabyte.kobwebx.markdown", version.ref = "kobweb" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+com-android-application = { id = "com.android.application", version.ref = "agp" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
