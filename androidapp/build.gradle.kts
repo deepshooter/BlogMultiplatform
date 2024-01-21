@@ -74,4 +74,5 @@ dependencies {
     implementation(libs.mongodb.sync)
     implementation(libs.coil.compose)
     implementation(libs.kotlinx.serialization)
+    implementation(project(":site"))
 }
