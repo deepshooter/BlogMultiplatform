@@ -2,7 +2,6 @@ package com.deepshooter.blogmultiplatform.util
 
 import com.deepshooter.blogmultiplatform.models.ApiListResponse
 import com.deepshooter.blogmultiplatform.models.ApiResponse
-import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Constants.AUTHOR_PARAM
 import com.deepshooter.blogmultiplatform.models.Constants.CATEGORY_PARAM
 import com.deepshooter.blogmultiplatform.models.Constants.POST_ID_PARAM
@@ -11,6 +10,7 @@ import com.deepshooter.blogmultiplatform.models.Constants.SKIP_PARAM
 import com.deepshooter.blogmultiplatform.models.Newsletter
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.RandomJoke
+import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.User
 import com.deepshooter.blogmultiplatform.models.UserWithoutPassword
 import com.varabyte.kobweb.browser.api

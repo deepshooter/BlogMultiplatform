@@ -2,7 +2,8 @@ package com.deepshooter.androidapp.navigation
 
 import com.deepshooter.androidapp.util.Constants.CATEGORY_ARGUMENT
 import com.deepshooter.androidapp.util.Constants.POST_ID_ARGUMENT
-import com.deepshooter.blogmultiplatform.models.Category as PostCategory
+import com.deepshooter.androidapp.models.Category as PostCategory
+
 
 sealed class Screen(val route: String) {
 

@@ -1,17 +1,15 @@
 package com.deepshooter.blogmultiplatform.components
 
 import androidx.compose.runtime.Composable
-import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.util.Constants.FONT_FAMILY
-import com.varabyte.kobweb.compose.css.Cursor
+import com.deepshooter.blogmultiplatform.models.Category
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.height

@@ -1,6 +1,5 @@
 package com.deepshooter.blogmultiplatform.data
 
-import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import com.deepshooter.blogmultiplatform.models.Newsletter
 import com.deepshooter.blogmultiplatform.models.Post
@@ -8,6 +7,7 @@ import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.User
 import com.deepshooter.blogmultiplatform.util.Constants.DATABASE_NAME
 import com.deepshooter.blogmultiplatform.util.Constants.MAIN_POSTS_LIMIT
+import com.deepshooter.blogmultiplatform.models.Category
 import com.mongodb.client.model.Filters
 import com.varabyte.kobweb.api.data.add
 import com.varabyte.kobweb.api.init.InitApi
@@ -16,7 +16,6 @@ import kotlinx.coroutines.reactive.awaitFirst
 import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.toList
 import com.mongodb.client.model.Indexes.descending
-import com.mongodb.client.model.Updates
 import kotlinx.coroutines.reactive.awaitLast
 import org.litote.kmongo.descending
 import org.litote.kmongo.eq
@@ -25,6 +24,7 @@ import org.litote.kmongo.reactivestreams.KMongo
 import org.litote.kmongo.reactivestreams.getCollection
 import org.litote.kmongo.regex
 import org.litote.kmongo.setValue
+
 
 
 @InitApi
@@ -55,7 +55,7 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
                 mutableListOf(
                     setValue(Post::title, post.title),
                     setValue(Post::subtitle, post.subtitle),
-                    setValue(Post::category, post.category),
+                    //setValue(Post::category, post.category),
                     setValue(Post::thumbnail, post.thumbnail),
                     setValue(Post::content, post.content),
                     setValue(Post::main, post.main),

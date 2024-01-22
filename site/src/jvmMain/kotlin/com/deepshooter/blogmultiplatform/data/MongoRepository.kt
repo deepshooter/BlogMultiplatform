@@ -1,10 +1,10 @@
 package com.deepshooter.blogmultiplatform.data
 
-import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Newsletter
 import com.deepshooter.blogmultiplatform.models.Post
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails
 import com.deepshooter.blogmultiplatform.models.User
+import com.deepshooter.blogmultiplatform.models.Category
 
 interface MongoRepository {
 

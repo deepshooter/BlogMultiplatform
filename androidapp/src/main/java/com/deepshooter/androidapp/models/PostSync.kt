@@ -1,6 +1,5 @@
 package com.deepshooter.androidapp.models
 
-import com.deepshooter.blogmultiplatform.models.Category
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
 

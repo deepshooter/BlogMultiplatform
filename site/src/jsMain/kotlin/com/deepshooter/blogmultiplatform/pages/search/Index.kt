@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.components.CategoryNavigationItems
 import com.deepshooter.blogmultiplatform.components.LoadingIndicator
 import com.deepshooter.blogmultiplatform.components.OverflowSidePanel
@@ -16,7 +17,6 @@ import com.deepshooter.blogmultiplatform.models.Constants.CATEGORY_PARAM
 import com.deepshooter.blogmultiplatform.util.searchPostsByCategory
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
-import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import com.deepshooter.blogmultiplatform.models.Constants.QUERY_PARAM
 import com.deepshooter.blogmultiplatform.models.PostWithoutDetails

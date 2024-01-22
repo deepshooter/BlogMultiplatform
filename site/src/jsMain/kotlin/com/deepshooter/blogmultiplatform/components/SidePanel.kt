@@ -20,8 +20,8 @@ import com.varabyte.kobweb.compose.css.CSSTransition
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.ScrollBehavior
-import com.varabyte.kobweb.compose.dom.svg.Path
-import com.varabyte.kobweb.compose.dom.svg.Svg
+import com.varabyte.kobweb.compose.dom.Path
+import com.varabyte.kobweb.compose.dom.Svg
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -209,22 +209,16 @@ private fun VectorIcon(
                 attr("fill", "none")
             }
     ) {
-        Path(
-            attrs = Modifier
-                .id(Id.vectorIcon)
-                .thenIf(
-                    condition = selected,
-                    other = Modifier.styleModifier {
-                        property("stroke", Theme.Primary.hex)
-                    }
-                )
-                .toAttrs {
-                    attr("d", value = pathData)
-                    attr("stroke-width", value = "2")
-                    attr("stroke-linecap", value = "round")
-                    attr("stroke-linejoin", value = "round")
-                }
-        )
+        Path {
+            if (selected) {
+                attr(name = "style", value = "stroke: ${Theme.Primary.hex}")
+            }
+            attr(name = "id", value = Id.vectorIcon)
+            attr(name = "d", value = pathData)
+            attr(name = "stroke-width", value = "2")
+            attr(name = "stroke-linecap", value = "round")
+            attr(name = "stroke-linejoin", value = "round")
+        }
     }
 }
 

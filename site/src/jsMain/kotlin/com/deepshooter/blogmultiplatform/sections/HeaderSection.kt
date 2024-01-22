@@ -7,13 +7,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.deepshooter.blogmultiplatform.components.CategoryNavigationItems
 import com.deepshooter.blogmultiplatform.components.SearchBar
-import com.deepshooter.blogmultiplatform.models.Category
 import com.deepshooter.blogmultiplatform.models.Theme
 import com.deepshooter.blogmultiplatform.navigation.Screen
 import com.deepshooter.blogmultiplatform.util.Constants.HEADER_HEIGHT
 import com.deepshooter.blogmultiplatform.util.Constants.PAGE_WIDTH
 import com.deepshooter.blogmultiplatform.util.Id
 import com.deepshooter.blogmultiplatform.util.Res
+import com.deepshooter.blogmultiplatform.models.Category
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Row
