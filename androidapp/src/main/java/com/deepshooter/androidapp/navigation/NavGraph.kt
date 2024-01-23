@@ -1,6 +1,10 @@
 package com.deepshooter.androidapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -16,8 +20,32 @@ fun SetupNavGraph(navController: NavHostController) {
     ) {
 
         composable(route = Screen.Home.route) {
+
             val viewModel: HomeViewModel = viewModel()
-            HomeScreen(viewModel.allPosts.value)
+            var searchBarOpened by remember { mutableStateOf(false) }
+            var query by remember { mutableStateOf("") }
+            var active by remember { mutableStateOf(false) }
+
+            HomeScreen(
+                posts = viewModel.allPosts.value,
+                searchedPosts = viewModel.searchedPosts.value,
+                query = query,
+                searchBarOpened = searchBarOpened,
+                active = active,
+                onActiveChange = { active = it },
+                onQueryChange = { query = it },
+                onCategorySelect = {},
+                onSearchBarChange = { opened ->
+                    searchBarOpened = opened
+                    if (!opened) {
+                        query = ""
+                        active = false
+                        viewModel.resetSearchedPosts()
+                    }
+                },
+                onSearch = viewModel::searchPostsByTitle,
+                onPostClick = {}
+            )
         }
 
         composable(route = Screen.Category.route) {

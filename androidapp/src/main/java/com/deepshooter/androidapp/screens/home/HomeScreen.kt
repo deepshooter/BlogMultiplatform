@@ -2,6 +2,8 @@ package com.deepshooter.androidapp.screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -10,9 +12,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import com.deepshooter.androidapp.components.PostCardsView
+import com.deepshooter.androidapp.models.Category
 import com.deepshooter.androidapp.models.Post
 import com.deepshooter.androidapp.util.RequestState
 
@@ -20,7 +25,19 @@ import com.deepshooter.androidapp.util.RequestState
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(posts: RequestState<List<Post>>) {
+fun HomeScreen(
+    posts: RequestState<List<Post>>,
+    searchedPosts: RequestState<List<Post>>,
+    query: String,
+    searchBarOpened: Boolean,
+    active: Boolean,
+    onActiveChange: (Boolean) -> Unit,
+    onQueryChange: (String) -> Unit,
+    onCategorySelect: (Category) -> Unit,
+    onSearchBarChange: (Boolean) -> Unit,
+    onSearch: (String) -> Unit,
+    onPostClick: (String) -> Unit
+) {
 
     Scaffold(
         topBar = {
@@ -43,7 +60,8 @@ fun HomeScreen(posts: RequestState<List<Post>>) {
                 actions = {
                     IconButton(
                         onClick = {
-
+                            onSearchBarChange(true)
+                            onActiveChange(true)
                         }
                     ) {
                         Icon(
@@ -54,7 +72,40 @@ fun HomeScreen(posts: RequestState<List<Post>>) {
                     }
                 }
             )
-
+            if (searchBarOpened) {
+                SearchBar(
+                    query = query,
+                    onQueryChange = onQueryChange,
+                    onSearch = onSearch,
+                    active = active,
+                    onActiveChange = onActiveChange,
+                    placeholder = { Text(text = "Search here...") },
+                    leadingIcon = {
+                        IconButton(onClick = { onSearchBarChange(false) }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back Arrow Icon",
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = { onQueryChange("") }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Close Icon",
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                ) {
+                    PostCardsView(
+                        posts = searchedPosts,
+                        topMargin = 12.dp,
+                        onPostClick = onPostClick
+                    )
+                }
+            }
         }
     ) {
 
