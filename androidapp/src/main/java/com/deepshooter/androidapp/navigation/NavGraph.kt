@@ -1,10 +1,12 @@
 package com.deepshooter.androidapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.deepshooter.androidapp.screens.home.HomeScreen
+import com.deepshooter.androidapp.screens.home.HomeViewModel
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
@@ -14,7 +16,8 @@ fun SetupNavGraph(navController: NavHostController) {
     ) {
 
         composable(route = Screen.Home.route) {
-            HomeScreen()
+            val viewModel: HomeViewModel = viewModel()
+            HomeScreen(viewModel.allPosts.value)
         }
 
         composable(route = Screen.Category.route) {

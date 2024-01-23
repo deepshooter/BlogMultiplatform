@@ -1,11 +1,15 @@
 package  com.deepshooter.androidapp.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Surface
@@ -18,17 +22,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.deepshooter.androidapp.models.Category
-import com.deepshooter.androidapp.models.PostSync
+import com.deepshooter.androidapp.models.Post
+import com.deepshooter.androidapp.util.RequestState
 import com.deepshooter.androidapp.util.convertLongToDate
 import com.deepshooter.androidapp.util.decodeThumbnailImage
 
 @Composable
 fun PostCard(
-    post: PostSync,
+    post: Post,
     onPostClick: (String) -> Unit
 ) {
     val context = LocalContext.current
@@ -88,6 +94,49 @@ fun PostCard(
                     label = { Text(text = Category.valueOf(post.category).name) }
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun PostCardsView(
+    posts: RequestState<List<Post>>,
+    topMargin: Dp,
+    hideMessage: Boolean = false,
+    onPostClick: (String) -> Unit
+) {
+    when (posts) {
+        is RequestState.Success -> {
+            if (posts.data.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = topMargin)
+                        .padding(horizontal = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(
+                        items = posts.data,
+                        key = { post -> post._id }
+                    ) { post ->
+                        PostCard(post = post, onPostClick = onPostClick)
+                    }
+                }
+            } else {
+                EmptyUI()
+            }
+        }
+
+        is RequestState.Error -> {
+            EmptyUI(message = posts.error.message.toString())
+        }
+
+        is RequestState.Idle -> {
+            EmptyUI(hideMessage = hideMessage)
+        }
+
+        is RequestState.Loading -> {
+            EmptyUI(loading = true)
         }
     }
 }

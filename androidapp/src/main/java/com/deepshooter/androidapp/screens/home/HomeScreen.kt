@@ -12,12 +12,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.deepshooter.androidapp.components.PostCardsView
+import com.deepshooter.androidapp.models.Post
+import com.deepshooter.androidapp.util.RequestState
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(posts: RequestState<List<Post>>) {
 
     Scaffold(
         topBar = {
@@ -54,6 +57,13 @@ fun HomeScreen() {
 
         }
     ) {
+
+        PostCardsView(
+            posts = posts,
+            topMargin = it.calculateTopPadding(),
+            hideMessage = true,
+            onPostClick = {}
+        )
 
     }
 
