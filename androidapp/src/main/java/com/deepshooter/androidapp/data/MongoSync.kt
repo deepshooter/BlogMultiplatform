@@ -1,5 +1,6 @@
 package com.deepshooter.androidapp.data
 
+import com.deepshooter.androidapp.models.Category
 import com.deepshooter.androidapp.models.Post
 import com.deepshooter.androidapp.util.Constants.APP_ID
 import com.deepshooter.androidapp.util.RequestState
@@ -57,6 +58,22 @@ object MongoSync : MongoSyncRepository {
         return if (user != null) {
             try {
                 realm.query<Post>(query = "title CONTAINS[c] $0", query)
+                    .asFlow()
+                    .map { result ->
+                        RequestState.Success(data = result.list)
+                    }
+            } catch (e: Exception) {
+                flow { emit(RequestState.Error(Exception(e.message))) }
+            }
+        } else {
+            flow { emit(RequestState.Error(Exception("User not authenticated."))) }
+        }
+    }
+
+    override fun searchPostsByCategory(category: Category): Flow<RequestState<List<Post>>> {
+        return if (user != null) {
+            try {
+                realm.query<Post>(query = "category == $0", category.name)
                     .asFlow()
                     .map { result ->
                         RequestState.Success(data = result.list)

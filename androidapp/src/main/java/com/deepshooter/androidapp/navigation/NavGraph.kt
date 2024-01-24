@@ -7,10 +7,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.deepshooter.androidapp.models.Category
+import com.deepshooter.androidapp.screens.category.CategoryScreen
+import com.deepshooter.androidapp.screens.category.CategoryViewModel
 import com.deepshooter.androidapp.screens.home.HomeScreen
 import com.deepshooter.androidapp.screens.home.HomeViewModel
+import com.deepshooter.androidapp.util.Constants.CATEGORY_ARGUMENT
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
@@ -34,7 +40,7 @@ fun SetupNavGraph(navController: NavHostController) {
                 active = active,
                 onActiveChange = { active = it },
                 onQueryChange = { query = it },
-                onCategorySelect = {},
+                onCategorySelect = { navController.navigate(Screen.Category.passCategory(it)) },
                 onSearchBarChange = { opened ->
                     searchBarOpened = opened
                     if (!opened) {
@@ -48,8 +54,21 @@ fun SetupNavGraph(navController: NavHostController) {
             )
         }
 
-        composable(route = Screen.Category.route) {
-
+        composable(
+            route = Screen.Category.route,
+            arguments = listOf(navArgument(name = CATEGORY_ARGUMENT) {
+                type = NavType.StringType
+            })
+        ) {
+            val viewModel: CategoryViewModel = viewModel()
+            val selectedCategory =
+                it.arguments?.getString(CATEGORY_ARGUMENT) ?: Category.Programming.name
+            CategoryScreen(
+                posts = viewModel.categoryPosts.value,
+                category = Category.valueOf(selectedCategory),
+                onBackPress = { navController.popBackStack() },
+                onPostClick = {}
+            )
         }
 
         composable(route = Screen.Details.route) {
