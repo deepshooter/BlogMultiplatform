@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.deepshooter.blogmultiplatform.Constants.SHOW_SECTIONS_PARAM
 import com.deepshooter.blogmultiplatform.components.CategoryNavigationItems
 import com.deepshooter.blogmultiplatform.components.ErrorView
 import com.deepshooter.blogmultiplatform.components.LoadingIndicator
@@ -76,9 +77,9 @@ fun PostPage() {
     }
 
     LaunchedEffect(key1 = context.route) {
-        /*  showSections = if (context.route.params.containsKey(SHOW_SECTIONS_PARAM)) {
-              context.route.params.getValue(SHOW_SECTIONS_PARAM).toBoolean()
-          } else true*/
+        showSections = if (context.route.params.containsKey(SHOW_SECTIONS_PARAM)) {
+            context.route.params.getValue(SHOW_SECTIONS_PARAM).toBoolean()
+        } else true
         if (hasPostIdParam) {
             val postId = context.route.params.getValue(POST_ID_PARAM)
             apiResponse = fetchSelectedPost(id = postId)

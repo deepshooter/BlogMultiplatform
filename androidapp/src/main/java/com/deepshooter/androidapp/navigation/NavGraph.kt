@@ -20,6 +20,7 @@ import com.deepshooter.androidapp.screens.home.HomeViewModel
 import com.deepshooter.androidapp.util.Constants
 import com.deepshooter.androidapp.util.Constants.CATEGORY_ARGUMENT
 import com.deepshooter.androidapp.util.Constants.POST_ID_ARGUMENT
+import com.deepshooter.blogmultiplatform.Constants.SHOW_SECTIONS_PARAM
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
@@ -86,7 +87,7 @@ fun SetupNavGraph(navController: NavHostController) {
         ) {
             val postId = it.arguments?.getString(POST_ID_ARGUMENT)
             DetailsScreen(
-                url = "http://10.0.2.2:8080/posts/post?${POST_ID_ARGUMENT}=$postId",
+                url = "http://10.0.2.2:8080/posts/post?${POST_ID_ARGUMENT}=$postId&${SHOW_SECTIONS_PARAM}=false",
                 onBackPress = { navController.popBackStack() }
             )
         }
