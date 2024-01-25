@@ -14,9 +14,12 @@ import androidx.navigation.navArgument
 import com.deepshooter.androidapp.models.Category
 import com.deepshooter.androidapp.screens.category.CategoryScreen
 import com.deepshooter.androidapp.screens.category.CategoryViewModel
+import com.deepshooter.androidapp.screens.details.DetailsScreen
 import com.deepshooter.androidapp.screens.home.HomeScreen
 import com.deepshooter.androidapp.screens.home.HomeViewModel
+import com.deepshooter.androidapp.util.Constants
 import com.deepshooter.androidapp.util.Constants.CATEGORY_ARGUMENT
+import com.deepshooter.androidapp.util.Constants.POST_ID_ARGUMENT
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
@@ -50,7 +53,9 @@ fun SetupNavGraph(navController: NavHostController) {
                     }
                 },
                 onSearch = viewModel::searchPostsByTitle,
-                onPostClick = {}
+                onPostClick = { postId ->
+                    navController.navigate(Screen.Details.passPostId(postId))
+                }
             )
         }
 
@@ -67,12 +72,23 @@ fun SetupNavGraph(navController: NavHostController) {
                 posts = viewModel.categoryPosts.value,
                 category = Category.valueOf(selectedCategory),
                 onBackPress = { navController.popBackStack() },
-                onPostClick = {}
+                onPostClick = { postId ->
+                    navController.navigate(Screen.Details.passPostId(postId))
+                }
             )
         }
 
-        composable(route = Screen.Details.route) {
-
+        composable(
+            route = Screen.Details.route,
+            arguments = listOf(navArgument(name = POST_ID_ARGUMENT) {
+                type = NavType.StringType
+            })
+        ) {
+            val postId = it.arguments?.getString(POST_ID_ARGUMENT)
+            DetailsScreen(
+                url = "http://10.0.2.2:8080/posts/post?${POST_ID_ARGUMENT}=$postId",
+                onBackPress = { navController.popBackStack() }
+            )
         }
     }
 }

@@ -131,7 +131,7 @@ fun HomeScreen(
                 posts = posts,
                 topMargin = it.calculateTopPadding(),
                 hideMessage = true,
-                onPostClick = {}
+                onPostClick = onPostClick
             )
 
         }
