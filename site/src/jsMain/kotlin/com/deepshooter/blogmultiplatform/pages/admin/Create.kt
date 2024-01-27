@@ -167,7 +167,7 @@ fun CreateScreen() {
                 (document.getElementById(Id.editor) as HTMLTextAreaElement).value =
                     response.data.content
                 uiState = uiState.copy(
-                    id = response.data.id,
+                    id = response.data._id,
                     title = response.data.title,
                     subtitle = response.data.subtitle,
                     content = response.data.content,
@@ -397,7 +397,7 @@ fun CreateScreen() {
                            if (hasPostIdParam) {
                                val result = updatePost(
                                    Post(
-                                       id = uiState.id,
+                                       _id = uiState.id,
                                        title = uiState.title,
                                        subtitle = uiState.subtitle,
                                        thumbnail = uiState.thumbnail,

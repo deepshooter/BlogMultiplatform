@@ -12,19 +12,11 @@ import com.mongodb.client.model.Filters
 import com.varabyte.kobweb.api.data.add
 import com.varabyte.kobweb.api.init.InitApi
 import com.varabyte.kobweb.api.init.InitApiContext
-import kotlinx.coroutines.reactive.awaitFirst
-import org.litote.kmongo.and
-import org.litote.kmongo.coroutine.toList
 import com.mongodb.client.model.Indexes.descending
-import kotlinx.coroutines.reactive.awaitLast
-import org.litote.kmongo.descending
-import org.litote.kmongo.eq
-import org.litote.kmongo.`in`
-import org.litote.kmongo.reactivestreams.KMongo
-import org.litote.kmongo.reactivestreams.getCollection
-import org.litote.kmongo.regex
-import org.litote.kmongo.setValue
-
+import com.mongodb.client.model.Updates
+import com.mongodb.kotlin.client.coroutine.MongoClient
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.firstOrNull
 
 
 @InitApi
@@ -39,36 +31,36 @@ fun initMongoDB(context: InitApiContext) {
 
 class MongoDB(private val context: InitApiContext) : MongoRepository {
 
-    private val client = KMongo.createClient()
+    private val client =  MongoClient.create()
     private val database = client.getDatabase(DATABASE_NAME)
-    private val userCollection = database.getCollection<User>()
-    private val postCollection = database.getCollection<Post>()
-    private val newsletterCollection = database.getCollection<Newsletter>()
+    private val userCollection = database.getCollection<User>("user")
+    private val postCollection = database.getCollection<Post>("post")
+    private val newsletterCollection = database.getCollection<Newsletter>("newsletter")
     override suspend fun addPost(post: Post): Boolean {
-        return postCollection.insertOne(post).awaitFirst().wasAcknowledged()
+        return postCollection.insertOne(post).wasAcknowledged()
     }
 
     override suspend fun updatePost(post: Post): Boolean {
         return postCollection
             .updateOne(
-                Post::id eq post.id,
+                Filters.eq(Post::_id.name, post._id),
                 mutableListOf(
-                    setValue(Post::title, post.title),
-                    setValue(Post::subtitle, post.subtitle),
-                    //setValue(Post::category, post.category),
-                    setValue(Post::thumbnail, post.thumbnail),
-                    setValue(Post::content, post.content),
-                    setValue(Post::main, post.main),
-                    setValue(Post::popular, post.popular),
-                    setValue(Post::sponsored, post.sponsored)
+                    Updates.set(Post::title.name, post.title),
+                    Updates.set(Post::subtitle.name, post.subtitle),
+                    Updates.set(Post::category.name, post.category),
+                    Updates.set(Post::thumbnail.name, post.thumbnail),
+                    Updates.set(Post::content.name, post.content),
+                    Updates.set(Post::main.name, post.main),
+                    Updates.set(Post::popular.name, post.popular),
+                    Updates.set(Post::sponsored.name, post.sponsored)
                 )
-            ).awaitLast().wasAcknowledged()
+            ).wasAcknowledged()
     }
 
     override suspend fun readMyPosts(skip: Int, author: String): List<PostWithoutDetails> {
         return postCollection
             .withDocumentClass(PostWithoutDetails::class.java)
-            .find(PostWithoutDetails::author eq author)
+            .find(Filters.eq(PostWithoutDetails::author.name, author))
             .sort(descending(PostWithoutDetails::date.name))
             .skip(skip)
             .limit(POSTS_PER_PAGE)
@@ -78,8 +70,8 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
     override suspend fun readMainPosts(): List<PostWithoutDetails> {
         return postCollection
             .withDocumentClass(PostWithoutDetails::class.java)
-            .find(PostWithoutDetails::main eq true)
-            .sort(descending(PostWithoutDetails::date))
+            .find(Filters.eq(PostWithoutDetails::main.name, true))
+            .sort(descending(PostWithoutDetails::date.name))
             .limit(MAIN_POSTS_LIMIT)
             .toList()
     }
@@ -88,13 +80,13 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
         return postCollection
             .withDocumentClass(PostWithoutDetails::class.java)
             .find(
-                and(
-                    PostWithoutDetails::popular eq false,
-                    PostWithoutDetails::main eq false,
-                    PostWithoutDetails::sponsored eq false
+                Filters.and(
+                    Filters.eq(PostWithoutDetails::popular.name, false),
+                    Filters.eq(PostWithoutDetails::main.name, false),
+                    Filters.eq(PostWithoutDetails::sponsored.name, false)
                 )
             )
-            .sort(descending(PostWithoutDetails::date))
+            .sort(descending(PostWithoutDetails::date.name))
             .skip(skip)
             .limit(POSTS_PER_PAGE)
             .toList()
@@ -103,8 +95,8 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
     override suspend fun readSponsoredPosts(): List<PostWithoutDetails> {
         return postCollection
             .withDocumentClass(PostWithoutDetails::class.java)
-            .find(PostWithoutDetails::sponsored eq true)
-            .sort(descending(PostWithoutDetails::date))
+            .find(Filters.eq(PostWithoutDetails::sponsored.name, true))
+            .sort(descending(PostWithoutDetails::date.name))
             .limit(2)
             .toList()
     }
@@ -112,8 +104,8 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
     override suspend fun readPopularPosts(skip: Int): List<PostWithoutDetails> {
         return postCollection
             .withDocumentClass(PostWithoutDetails::class.java)
-            .find(PostWithoutDetails::popular eq true)
-            .sort(descending(PostWithoutDetails::date))
+            .find(Filters.eq(PostWithoutDetails::popular.name, true))
+            .sort(descending(PostWithoutDetails::date.name))
             .skip(skip)
             .limit(POSTS_PER_PAGE)
             .toList()
@@ -121,8 +113,7 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
 
     override suspend fun deleteSelectedPosts(ids: List<String>): Boolean {
         return postCollection
-            .deleteMany(Post::id `in` ids)
-            .awaitLast()
+            .deleteMany(Filters.`in`(Post::_id.name, ids))
             .wasAcknowledged()
     }
 
@@ -132,8 +123,8 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
     ): List<PostWithoutDetails> {
         return postCollection
             .withDocumentClass(PostWithoutDetails::class.java)
-            .find(PostWithoutDetails::category eq category)
-            .sort(descending(PostWithoutDetails::date))
+            .find(Filters.eq(PostWithoutDetails::category.name, category))
+            .sort(descending(PostWithoutDetails::date.name))
             .skip(skip)
             .limit(POSTS_PER_PAGE)
             .toList()
@@ -143,26 +134,26 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
         val regexQuery = query.toRegex(RegexOption.IGNORE_CASE)
         return postCollection
             .withDocumentClass(PostWithoutDetails::class.java)
-            .find(PostWithoutDetails::title regex regexQuery.pattern)
-            .sort(descending(PostWithoutDetails::date))
+            .find(Filters.regex(PostWithoutDetails::title.name, regexQuery.pattern))
+            .sort(descending(PostWithoutDetails::date.name))
             .skip(skip)
             .limit(POSTS_PER_PAGE)
             .toList()
     }
 
     override suspend fun readSelectedPost(id: String): Post {
-        return postCollection.find(Post::id eq id).toList().first()
+        return postCollection.find(Filters.eq(Post::_id.name, id)).toList().first()
     }
 
     override suspend fun checkUserExistence(user: User): User? {
         return try {
             userCollection
                 .find(
-                    and(
-                        User::username eq user.username,
-                        User::password eq user.password
+                    Filters.and(
+                        Filters.eq(User::username.name, user.username),
+                        Filters.eq(User::password.name, user.password)
                     )
-                ).awaitFirst()
+                ).firstOrNull()
         } catch (e: Exception) {
             context.logger.error(e.message.toString())
             null
@@ -171,7 +162,7 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
 
     override suspend fun checkUserId(id: String): Boolean {
         return try {
-            val documentCount = userCollection.countDocuments(User::id eq id).awaitFirst()
+            val documentCount = userCollection.countDocuments(Filters.eq(User::_id.name, id))
             documentCount > 0
         } catch (e: Exception) {
             context.logger.error(e.message.toString())
@@ -188,7 +179,6 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
         } else {
             val newEmail = newsletterCollection
                 .insertOne(newsletter)
-                .awaitFirst()
                 .wasAcknowledged()
             if (newEmail) "Successfully Subscribed!"
             else "Something went wrong. Please try again later."

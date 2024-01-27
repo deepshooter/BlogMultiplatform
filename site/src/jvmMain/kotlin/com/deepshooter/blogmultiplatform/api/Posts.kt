@@ -24,7 +24,7 @@ import org.bson.codecs.ObjectIdGenerator
 suspend fun addPost(context: ApiContext) {
     try {
         val post = context.req.getBody<Post>()
-        val newPost = post?.copy(id = ObjectIdGenerator().generate().toString())
+        val newPost = post?.copy(_id = ObjectIdGenerator().generate().toString())
         context.res.setBody(
             newPost?.let {
                 context.data.getValue<MongoDB>().addPost(it)
