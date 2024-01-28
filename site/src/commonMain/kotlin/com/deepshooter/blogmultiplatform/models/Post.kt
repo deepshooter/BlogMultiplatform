@@ -7,7 +7,8 @@ import kotlinx.serialization.Serializable
 data class Post(
     val _id: String = "",
     val author: String = "",
-    val date: Long = 0L,
+    //val date: Long = 0L,
+    val date: Double = 0.0,
     val title: String,
     val subtitle: String,
     val thumbnail: String,
@@ -22,7 +23,8 @@ data class Post(
 data class PostWithoutDetails(
     val _id: String = "",
     val author: String,
-    val date: Long,
+    //val date: Long,
+    val date: Double,
     val title: String,
     val subtitle: String,
     val thumbnail: String,

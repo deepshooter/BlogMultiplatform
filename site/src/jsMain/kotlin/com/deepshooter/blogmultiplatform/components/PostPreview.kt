@@ -73,7 +73,6 @@ fun PostPreview(
     onClick: (String) -> Unit
 ) {
 
-    val context = rememberPageContext()
     var checked by remember(selectableMode) { mutableStateOf(false) }
 
     if (vertical) {
